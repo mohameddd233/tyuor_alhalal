@@ -1368,7 +1368,6 @@ input.error, select.error {
         function buildCustomerInvoice(order) {
             let msg = `🧾 *فاتورة طيور الحلال*\n`;
             msg += `📅 ${order.date}\n`;
-            msg += `🆔 رقم الفاتورة: *${order.invoiceId}*\n`;
             msg += `━━━━━━━━━━━━━━━\n`;
             msg += `📋 *تفاصيل الطلب:*\n`;
             order.cart.forEach((c, i) => {
@@ -1382,7 +1381,7 @@ input.error, select.error {
             msg += `💰 *الإجمالي الكلي: ${order.grandTotal.toFixed(1)} ج.م*\n`;
             msg += `━━━━━━━━━━━━━━━\n`;
             msg += `📍 العنوان: ${order.customerAddress}\n`;
-            msg += `📞 للتواصل: 010xxxxxxxx\n`;
+            msg += `📞 للتواصل:01062827014\n`;
             msg += `\n`;
             msg += `شكراً لتعاملكم مع *طيور الحلال* 🐓\n`;
             msg += `جودة تشرفك.. ونظافة تريح بالك 🍗💎`;
@@ -1391,7 +1390,6 @@ input.error, select.error {
 
         function buildAgentInvoice(order) {
             let msg = `🚚 *أوردر توصيل جديد - طيور الحلال*\n`;
-            msg += `🆔 رقم الفاتورة: *${order.invoiceId}*\n`;
             msg += `📅 ${order.date}\n`;
             msg += `━━━━━━━━━━━━━━━\n`;
             msg += `📋 *الطلب:*\n`;
