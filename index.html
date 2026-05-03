@@ -49,7 +49,6 @@
             -webkit-user-select: none;
         }
 
-        /* ============ HEADER & LOGO ============ */
         .header {
             background: var(--white);
             border-bottom: 3px solid var(--red);
@@ -107,7 +106,6 @@
             white-space: nowrap;
         }
 
-        /* ============ NAVIGATION ============ */
         .nav-container {
             display: flex;
             gap: 6px;
@@ -145,7 +143,6 @@
             font-size: 1.1rem;
         }
 
-        /* ============ MAIN CONTENT ============ */
         .main-content {
             max-width: 1200px;
             margin: 0 auto;
@@ -169,7 +166,6 @@
             }
         }
 
-        /* ============ CARDS ============ */
         .card {
             background: var(--white);
             border-radius: var(--radius-lg);
@@ -207,7 +203,6 @@
             color: var(--gray-800);
         }
 
-        /* ============ FORM ELEMENTS ============ */
         label {
             display: block;
             font-weight: 600;
@@ -325,7 +320,6 @@
             background: #1d4ed8;
         }
 
-        /* ============ PRICE TABLE ============ */
         .price-table {
             width: 100%;
             border-collapse: collapse;
@@ -379,7 +373,6 @@
             margin: 0 2px;
         }
 
-        /* ============ CART / ORDER ============ */
         .cart-item {
             display: flex;
             align-items: center;
@@ -431,7 +424,6 @@
             background: white;
         }
 
-        /* ============ INVOICE LOG ============ */
         .invoice-card {
             border: 2px solid var(--gray-100);
             border-radius: var(--radius-lg);
@@ -467,7 +459,6 @@
             animation: fadeSlideIn 0.3s ease;
         }
 
-        /* ============ MODAL ============ */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -497,6 +488,8 @@
             width: 95%;
             box-shadow: var(--shadow-xl);
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            max-height: 85vh;
+            overflow-y: auto;
         }
         @keyframes popIn {
             from {
@@ -521,7 +514,6 @@
             margin-top: 20px;
         }
 
-        /* ============ TOAST ============ */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -570,7 +562,6 @@
             }
         }
 
-        /* ============ DAILY TOTAL ============ */
         .big-number {
             font-size: 3.5rem;
             font-weight: 900;
@@ -611,7 +602,6 @@
             font-weight: 600;
         }
 
-        /* ============ SEARCH & FILTER ============ */
         .search-filter {
             display: flex;
             gap: 10px;
@@ -639,7 +629,32 @@
             border-color: var(--red);
         }
 
-        /* ============ RESPONSIVE ============ */
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 8px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--gray-400);
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .empty-state .emoji {
+            font-size: 4rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .header-inner {
                 padding: 8px 12px;
@@ -718,7 +733,6 @@
 </head>
 <body>
 
-    <!-- ==================== HEADER ==================== -->
     <header class="header">
         <div class="header-inner">
             <div class="logo-section">
@@ -728,54 +742,54 @@
             </div>
             <nav class="nav-container" id="mainNav">
                 <button class="nav-btn active" data-page="prices">
-                    <span class="nav-emoji"></span> الأسعار
+                    <span class="nav-emoji">💰</span> الأسعار
                 </button>
                 <button class="nav-btn" data-page="agents">
-                    <span class="nav-emoji"></span> المناديب
+                    <span class="nav-emoji">🛵</span> المناديب
                 </button>
                 <button class="nav-btn" data-page="clients">
-                    <span class="nav-emoji"></span> العملاء
+                    <span class="nav-emoji">👥</span> العملاء
                 </button>
                 <button class="nav-btn" data-page="inventory">
-                    <span class="nav-emoji"></span> المخزن
+                    <span class="nav-emoji">📦</span> المخزن
+                </button>
+                <button class="nav-btn" data-page="expenses">
+                    <span class="nav-emoji">💸</span> المصروفات
                 </button>
                 <button class="nav-btn" data-page="order">
-                    <span class="nav-emoji"></span> أوردر جديد
+                    <span class="nav-emoji">🧾</span> أوردر جديد
                 </button>
                 <button class="nav-btn" data-page="records">
-                    <span class="nav-emoji"></span> السجلات
+                    <span class="nav-emoji">📋</span> السجلات
                 </button>
                 <button class="nav-btn" data-page="daily">
-                    <span class="nav-emoji"></span> إجمالي اليوم
+                    <span class="nav-emoji">📊</span> إجمالي اليوم
                 </button>
             </nav>
         </div>
     </header>
 
-    <!-- ==================== MAIN CONTENT ==================== -->
     <div class="main-content" id="appContent"></div>
 
-    <!-- ==================== MODAL CONTAINER ==================== -->
     <div id="modalContainer" class="modal-overlay" style="display:none;">
         <div class="modal" id="modalContent"></div>
     </div>
 
-    <!-- ==================== TOAST CONTAINER ==================== -->
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // ==================== GLOBAL VARIABLES & STORAGE ====================
+        // ==================== STORAGE ====================
         const STORAGE_KEYS = {
             prices: 'tuyoor_prices',
             agents: 'tuyoor_agents',
             clients: 'tuyoor_clients',
             inventory: 'tuyoor_inventory',
+            inventoryLog: 'tuyoor_inventory_log',
             expenses: 'tuyoor_expenses',
             orders: 'tuyoor_orders',
             dailyDate: 'tuyoor_daily_date',
         };
 
-        // Default prices (shop & restaurant)
         const DEFAULT_PRICES = [
             { id: 'p1', name: 'فراخ بيضاء', category: 'قسم الدواجن الطازجة', shopPrice: 101, restPrice: 130 },
             { id: 'p2', name: 'فراخ ساسو', category: 'قسم الدواجن الطازجة', shopPrice: 130, restPrice: 160 },
@@ -800,6 +814,7 @@
                 agents: JSON.parse(localStorage.getItem(STORAGE_KEYS.agents)) || [],
                 clients: JSON.parse(localStorage.getItem(STORAGE_KEYS.clients)) || [],
                 inventory: JSON.parse(localStorage.getItem(STORAGE_KEYS.inventory)) || [],
+                inventoryLog: JSON.parse(localStorage.getItem(STORAGE_KEYS.inventoryLog)) || [],
                 expenses: JSON.parse(localStorage.getItem(STORAGE_KEYS.expenses)) || [],
                 orders: JSON.parse(localStorage.getItem(STORAGE_KEYS.orders)) || [],
                 dailyDate: localStorage.getItem(STORAGE_KEYS.dailyDate) || ''
@@ -810,41 +825,33 @@
         function saveAgents(a) { localStorage.setItem(STORAGE_KEYS.agents, JSON.stringify(a)); }
         function saveClients(c) { localStorage.setItem(STORAGE_KEYS.clients, JSON.stringify(c)); }
         function saveInventory(i) { localStorage.setItem(STORAGE_KEYS.inventory, JSON.stringify(i)); }
+        function saveInventoryLog(l) { localStorage.setItem(STORAGE_KEYS.inventoryLog, JSON.stringify(l)); }
         function saveExpenses(e) { localStorage.setItem(STORAGE_KEYS.expenses, JSON.stringify(e)); }
         function saveOrders(o) { localStorage.setItem(STORAGE_KEYS.orders, JSON.stringify(o)); }
         function setDailyDate(d) { localStorage.setItem(STORAGE_KEYS.dailyDate, d); }
 
-        // ==================== HELPERS ====================
         function getTodayString() {
             const d = new Date();
-            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2,
-                '0');
+            return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
         }
 
         function getNowString() {
             const d = new Date();
             return d.toLocaleString('ar-EG', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                hour12: true
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', hour12: true
             });
         }
 
         function uuid() {
-            return Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            return Date.now() + '-' + Math.random().toString(36).substring(2, 11);
         }
 
         function formatPhoneForWhatsapp(phone) {
             let cleaned = phone.replace(/[\s\-\+\(\)]/g, '');
             if (cleaned.startsWith('00')) cleaned = cleaned.substring(2);
-            if (cleaned.startsWith('0') && cleaned.length === 11) {
-                cleaned = '20' + cleaned.substring(1);
-            } else if (!cleaned.startsWith('20') && cleaned.length === 10) {
-                cleaned = '20' + cleaned;
-            }
+            if (cleaned.startsWith('0') && cleaned.length === 11) cleaned = '20' + cleaned.substring(1);
+            else if (!cleaned.startsWith('20') && cleaned.length === 10) cleaned = '20' + cleaned;
             return cleaned;
         }
 
@@ -854,54 +861,55 @@
             toast.className = 'toast toast-' + type;
             toast.textContent = message;
             container.appendChild(toast);
-            setTimeout(() => {
-                if (toast.parentNode) toast.parentNode.removeChild(toast);
-            }, 3200);
+            setTimeout(() => { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 3200);
         }
 
         function closeModal() {
             document.getElementById('modalContainer').style.display = 'none';
         }
 
-        // ==================== EXPORT TO EXCEL ====================
-        function exportToExcel(dataArray, filename = 'export.xlsx') {
-            // Simple CSV export for Excel compatibility
+        function exportToExcel(dataArray, filename = 'export.csv') {
             if (!dataArray || dataArray.length === 0) {
                 showToast('⚠️ لا توجد بيانات للتصدير', 'error');
                 return;
             }
-            
-            // Get headers from first object
             const headers = Object.keys(dataArray[0]);
-            
-            // Create CSV content
-            let csvContent = '\uFEFF'; // BOM for Arabic support
+            let csvContent = '\uFEFF';
             csvContent += headers.join(',') + '\n';
-            
             dataArray.forEach(row => {
                 const values = headers.map(header => {
                     let val = row[header] !== undefined ? row[header] : '';
-                    // Escape quotes and wrap in quotes if contains comma
                     val = String(val).replace(/"/g, '""');
-                    if (val.includes(',') || val.includes('\n') || val.includes('"')) {
-                        val = '"' + val + '"';
-                    }
+                    if (val.includes(',') || val.includes('\n') || val.includes('"')) val = '"' + val + '"';
                     return val;
                 });
                 csvContent += values.join(',') + '\n';
             });
-
-            // Create and trigger download
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', filename.replace('.xlsx', '.csv'));
+            link.setAttribute('download', filename);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             showToast('✅ تم التصدير بنجاح');
+        }
+
+        function addInventoryLog(itemName, type, quantityBefore, quantityAfter, action) {
+            const data = loadAll();
+            data.inventoryLog.unshift({
+                id: uuid(),
+                itemName,
+                type,
+                quantityBefore,
+                quantityAfter,
+                action,
+                date: getNowString(),
+                dateKey: getTodayString()
+            });
+            saveInventoryLog(data.inventoryLog);
         }
 
         // ==================== NAVIGATION ====================
@@ -920,42 +928,25 @@
             if (pageName) navigateTo(pageName);
         });
 
-        // ==================== RENDER ENGINE ====================
         function renderPage(pageName) {
             const root = document.getElementById('appContent');
             if (!root) return;
             root.innerHTML = '';
             switch (pageName) {
-                case 'prices':
-                    renderPrices(root);
-                    break;
-                case 'agents':
-                    renderAgents(root);
-                    break;
-                case 'clients':
-                    renderClients(root);
-                    break;
-                case 'inventory':
-                    renderInventory(root);
-                    break;
-                case 'order':
-                    renderOrder(root);
-                    break;
-                case 'records':
-                    renderRecords(root);
-                    break;
-                case 'daily':
-                    renderDaily(root);
-                    break;
-                default:
-                    break;
+                case 'prices': renderPrices(root); break;
+                case 'agents': renderAgents(root); break;
+                case 'clients': renderClients(root); break;
+                case 'inventory': renderInventory(root); break;
+                case 'expenses': renderExpensesPage(root); break;
+                case 'order': renderOrder(root); break;
+                case 'records': renderRecords(root); break;
+                case 'daily': renderDaily(root); break;
             }
         }
 
         // ==================== PAGE 1: PRICES ====================
         function renderPrices(container) {
-            const prices = loadAll().prices;
-            let html = `
+            container.innerHTML = `
             <div class="card">
                 <div class="card-header">
                     <div class="icon-circle">💰</div>
@@ -964,21 +955,11 @@
                 <p style="color:var(--gray-500);margin-bottom:16px;">🔸 عدّل السعر مباشرة. الأسعار بالجنيه المصري للكيلو الواحد.</p>
                 <div style="overflow-x:auto;">
                     <table class="price-table" id="priceTable">
-                        <thead>
-                            <tr>
-                                <th>المنتج</th>
-                                <th>سعر المحل (ج.م)</th>
-                                <th>سعر المطاعم (ج.م)</th>
-                                <th>نصف كيلو (محل)</th>
-                                <th>ربع كيلو (محل)</th>
-                                <th>القسم</th>
-                            </tr>
-                        </thead>
+                        <thead><tr><th>المنتج</th><th>سعر المحل (ج.م)</th><th>سعر المطاعم (ج.م)</th><th>نصف كيلو (محل)</th><th>ربع كيلو (محل)</th><th>القسم</th></tr></thead>
                         <tbody id="priceTableBody"></tbody>
                     </table>
                 </div>
             </div>`;
-            container.innerHTML = html;
             renderPriceTable();
         }
 
@@ -988,20 +969,18 @@
             if (!tbody) return;
             let html = '';
             let lastCategory = '';
-            prices.forEach((p, index) => {
+            prices.forEach(p => {
                 if (p.category !== lastCategory) {
                     html += `<tr class="category-row"><td colspan="6">${p.category}</td></tr>`;
                     lastCategory = p.category;
                 }
-                const halfPrice = (p.shopPrice / 2).toFixed(1);
-                const quarterPrice = (p.shopPrice / 4).toFixed(1);
                 html += `
                 <tr>
                     <td><strong>${p.name}</strong></td>
                     <td><input type="number" class="price-input" value="${p.shopPrice}" step="0.5" min="0" data-id="${p.id}" data-type="shop" onchange="updatePrice(this)" onfocus="this.select()"></td>
                     <td><input type="number" class="price-input" value="${p.restPrice}" step="0.5" min="0" data-id="${p.id}" data-type="rest" onchange="updatePrice(this)" onfocus="this.select()"></td>
-                    <td><span class="weight-badge">${halfPrice} ج.م</span></td>
-                    <td><span class="weight-badge">${quarterPrice} ج.م</span></td>
+                    <td><span class="weight-badge">${(p.shopPrice/2).toFixed(1)} ج.م</span></td>
+                    <td><span class="weight-badge">${(p.shopPrice/4).toFixed(1)} ج.م</span></td>
                     <td style="color:var(--gray-400);font-size:0.8rem;">${p.category}</td>
                 </tr>`;
             });
@@ -1012,11 +991,7 @@
             const id = input.dataset.id;
             const type = input.dataset.type;
             const val = parseFloat(input.value);
-            if (isNaN(val) || val < 0) {
-                renderPriceTable();
-                showToast('⚠️ الرجاء إدخال سعر صحيح', 'error');
-                return;
-            }
+            if (isNaN(val) || val < 0) { renderPriceTable(); showToast('⚠️ الرجاء إدخال سعر صحيح', 'error'); return; }
             const data = loadAll();
             const price = data.prices.find(p => p.id === id);
             if (price) {
@@ -1030,38 +1005,20 @@
 
         // ==================== PAGE 2: AGENTS ====================
         function renderAgents(container) {
-            const agents = loadAll().agents;
-            let html = `
+            container.innerHTML = `
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">🛵</div>
-                    <div class="card-title">إضافة مندوب توصيل جديد</div>
-                </div>
+                <div class="card-header"><div class="icon-circle">🛵</div><div class="card-title">إضافة مندوب توصيل جديد</div></div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
-                    <div style="flex:2;min-width:160px;">
-                        <label>👤 اسم المندوب</label>
-                        <input type="text" id="agentName" placeholder="أدخل اسم المندوب كاملاً">
-                    </div>
-                    <div style="flex:2;min-width:160px;">
-                        <label>📞 رقم الهاتف (مع مفتاح الدولة)</label>
-                        <input type="tel" id="agentPhone" placeholder="مثال: 010xxxxxxxx أو +20...">
-                    </div>
-                    <div style="flex:0;min-width:100px;">
-                        <button class="btn btn-primary" onclick="addAgent()">➕ إضافة</button>
-                    </div>
+                    <div style="flex:2;min-width:160px;"><label>👤 اسم المندوب</label><input type="text" id="agentName" placeholder="أدخل اسم المندوب كاملاً"></div>
+                    <div style="flex:2;min-width:160px;"><label>📞 رقم الهاتف</label><input type="tel" id="agentPhone" placeholder="مثال: 010xxxxxxxx"></div>
+                    <div style="flex:0;min-width:100px;"><button class="btn btn-primary" onclick="addAgent()">➕ إضافة</button></div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">📋</div>
-                    <div class="card-title">قائمة المندوبين</div>
-                </div>
-                <div style="display:flex;justify-content:flex-end;margin-bottom:10px;">
-                    <button class="btn btn-export btn-sm" onclick="exportAgents()">📥 تصدير Excel</button>
-                </div>
-                <div id="agentsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+                <div class="card-header"><div class="icon-circle">📋</div><div class="card-title">قائمة المندوبين</div></div>
+                <div style="display:flex;justify-content:flex-end;margin-bottom:10px;"><button class="btn btn-export btn-sm" onclick="exportAgents()">📥 تصدير Excel</button></div>
+                <div id="agentsList"></div>
             </div>`;
-            container.innerHTML = html;
             renderAgentsList();
         }
 
@@ -1070,17 +1027,14 @@
             const list = document.getElementById('agentsList');
             if (!list) return;
             if (agents.length === 0) {
-                list.innerHTML = '<div class="empty-state"><span class="emoji">🛵</span>لا يوجد مندوبين حالياً<br>أضف مندوب جديد أعلاه</div>';
+                list.innerHTML = '<div class="empty-state"><span class="emoji">🛵</span>لا يوجد مندوبين</div>';
             } else {
                 list.innerHTML = agents.map(a => `
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--gray-50);border-radius:var(--radius);flex-wrap:wrap;gap:8px;">
-                    <div>
-                        <strong>👤 ${a.name}</strong>
-                        <span style="margin-right:12px;color:var(--gray-500);">📞 ${a.phone}</span>
-                    </div>
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--gray-50);border-radius:var(--radius);margin-bottom:8px;flex-wrap:wrap;gap:8px;">
+                    <div><strong>👤 ${a.name}</strong> <span style="margin-right:12px;color:var(--gray-500);">📞 ${a.phone}</span></div>
                     <div style="display:flex;gap:6px;">
-                        <button class="btn btn-outline btn-xs" onclick="editAgent('${a.id}')">✏️ تعديل</button>
-                        <button class="btn btn-danger btn-xs" onclick="deleteAgent('${a.id}')">🗑️ حذف</button>
+                        <button class="btn btn-outline btn-xs" onclick="editAgent('${a.id}')">✏️</button>
+                        <button class="btn btn-danger btn-xs" onclick="deleteAgent('${a.id}')">🗑️</button>
                     </div>
                 </div>`).join('');
             }
@@ -1089,15 +1043,12 @@
         window.addAgent = function() {
             const name = document.getElementById('agentName')?.value.trim();
             const phone = document.getElementById('agentPhone')?.value.trim();
-            if (!name || !phone) {
-                showToast('⚠️ جميع الحقول مطلوبة (الاسم ورقم الهاتف)', 'error');
-                return;
-            }
+            if (!name || !phone) { showToast('⚠️ جميع الحقول مطلوبة', 'error'); return; }
             const data = loadAll();
             data.agents.push({ id: uuid(), name, phone });
             saveAgents(data.agents);
             renderPage('agents');
-            showToast('🛵 تم إضافة المندوب بنجاح');
+            showToast('🛵 تم إضافة المندوب');
         };
 
         window.editAgent = function(id) {
@@ -1107,12 +1058,10 @@
             const modal = document.getElementById('modalContainer');
             document.getElementById('modalContent').innerHTML = `
             <h3>✏️ تعديل بيانات المندوب</h3>
-            <label>👤 اسم المندوب</label>
-            <input type="text" id="editAgentName" value="${agent.name}">
-            <label style="margin-top:10px;">📞 رقم الهاتف</label>
-            <input type="tel" id="editAgentPhone" value="${agent.phone}">
+            <label>👤 اسم المندوب</label><input type="text" id="editAgentName" value="${agent.name}">
+            <label style="margin-top:10px;">📞 رقم الهاتف</label><input type="tel" id="editAgentPhone" value="${agent.phone}">
             <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveAgentEdit('${id}')">💾 حفظ التعديلات</button>
+                <button class="btn btn-primary" onclick="saveAgentEdit('${id}')">💾 حفظ</button>
                 <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
             </div>`;
             modal.style.display = 'flex';
@@ -1121,20 +1070,13 @@
         window.saveAgentEdit = function(id) {
             const name = document.getElementById('editAgentName')?.value.trim();
             const phone = document.getElementById('editAgentPhone')?.value.trim();
-            if (!name || !phone) {
-                showToast('⚠️ جميع الحقول مطلوبة', 'error');
-                return;
-            }
+            if (!name || !phone) { showToast('⚠️ جميع الحقول مطلوبة', 'error'); return; }
             const data = loadAll();
             const agent = data.agents.find(a => a.id === id);
-            if (agent) {
-                agent.name = name;
-                agent.phone = phone;
-                saveAgents(data.agents);
-                closeModal();
-                renderAgentsList();
-                showToast('✅ تم تعديل بيانات المندوب');
-            }
+            if (agent) { agent.name = name; agent.phone = phone; saveAgents(data.agents); }
+            closeModal();
+            renderAgentsList();
+            showToast('✅ تم تعديل بيانات المندوب');
         };
 
         window.deleteAgent = function(id) {
@@ -1148,71 +1090,34 @@
 
         window.exportAgents = function() {
             const agents = loadAll().agents;
-            if (agents.length === 0) {
-                showToast('⚠️ لا يوجد مندوبين للتصدير', 'error');
-                return;
-            }
-            const exportData = agents.map(a => ({
-                'رقم الهوية': a.id,
-                'اسم المندوب': a.name,
-                'رقم الهاتف': a.phone
-            }));
-            exportToExcel(exportData, 'المناديب.csv');
+            if (agents.length === 0) { showToast('⚠️ لا يوجد مندوبين', 'error'); return; }
+            exportToExcel(agents.map(a => ({ 'اسم المندوب': a.name, 'رقم الهاتف': a.phone })), 'المناديب.csv');
         };
 
-        // ==================== PAGE 3: CLIENTS (RESTAURANTS & INDIVIDUALS) ====================
+        // ==================== PAGE 3: CLIENTS ====================
         function renderClients(container) {
-            const clients = loadAll().clients;
-            let html = `
+            container.innerHTML = `
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">👥</div>
-                    <div class="card-title">إضافة عميل / مطعم جديد</div>
-                </div>
+                <div class="card-header"><div class="icon-circle">👥</div><div class="card-title">إضافة عميل / مطعم جديد</div></div>
                 <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
-                    <div style="flex:1;min-width:120px;">
-                        <label>🏷️ النوع</label>
-                        <select id="clientType">
-                            <option value="client">👤 عميل</option>
-                            <option value="restaurant">🏢 مطعم</option>
-                        </select>
-                    </div>
-                    <div style="flex:2;min-width:160px;">
-                        <label>🏢 الاسم</label>
-                        <input type="text" id="clientName" placeholder="أدخل الاسم">
-                    </div>
-                    <div style="flex:2;min-width:160px;">
-                        <label>📞 رقم الهاتف</label>
-                        <input type="tel" id="clientPhone" placeholder="مثال: 010xxxxxxxx">
-                    </div>
-                    <div style="flex:2;min-width:160px;">
-                        <label>📍 العنوان</label>
-                        <input type="text" id="clientAddress" placeholder="العنوان بالتفصيل">
-                    </div>
-                    <div style="flex:0;min-width:100px;">
-                        <button class="btn btn-primary" onclick="addClient()">➕ إضافة</button>
-                    </div>
+                    <div style="flex:1;min-width:120px;"><label>🏷️ النوع</label><select id="clientType"><option value="client">👤 عميل</option><option value="restaurant">🏢 مطعم</option></select></div>
+                    <div style="flex:2;min-width:160px;"><label>🏢 الاسم</label><input type="text" id="clientName" placeholder="أدخل الاسم"></div>
+                    <div style="flex:2;min-width:160px;"><label>📞 رقم الهاتف</label><input type="tel" id="clientPhone" placeholder="مثال: 010xxxxxxxx"></div>
+                    <div style="flex:2;min-width:160px;"><label>📍 العنوان</label><input type="text" id="clientAddress" placeholder="العنوان بالتفصيل"></div>
+                    <div style="flex:0;min-width:100px;"><button class="btn btn-primary" onclick="addClient()">➕ إضافة</button></div>
                 </div>
             </div>
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">📋</div>
-                    <div class="card-title">قائمة العملاء والمطاعم</div>
-                </div>
+                <div class="card-header"><div class="icon-circle">📋</div><div class="card-title">قائمة العملاء والمطاعم</div></div>
                 <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
-                    <input type="text" id="clientSearch" placeholder="🔍 بحث عن عميل أو مطعم..." oninput="renderClientsList()" style="max-width:300px;">
+                    <input type="text" id="clientSearch" placeholder="🔍 بحث..." oninput="renderClientsList()" style="max-width:300px;">
                     <div style="display:flex;gap:6px;">
-                        <select id="clientFilter" onchange="renderClientsList()" style="max-width:150px;">
-                            <option value="all">الكل</option>
-                            <option value="client">👤 عملاء</option>
-                            <option value="restaurant">🏢 مطاعم</option>
-                        </select>
+                        <select id="clientFilter" onchange="renderClientsList()" style="max-width:150px;"><option value="all">الكل</option><option value="client">👤 عملاء</option><option value="restaurant">🏢 مطاعم</option></select>
                         <button class="btn btn-export btn-sm" onclick="exportClients()">📥 تصدير Excel</button>
                     </div>
                 </div>
-                <div id="clientsList" style="display:flex;flex-direction:column;gap:8px;"></div>
+                <div id="clientsList"></div>
             </div>`;
-            container.innerHTML = html;
             renderClientsList();
         }
 
@@ -1222,33 +1127,23 @@
             const filter = document.getElementById('clientFilter')?.value || 'all';
             const list = document.getElementById('clientsList');
             if (!list) return;
-            
-            let filteredClients = clients;
-            if (search) {
-                filteredClients = filteredClients.filter(c => 
-                    c.name.toLowerCase().includes(search) || 
-                    c.phone.includes(search) || 
-                    (c.address && c.address.toLowerCase().includes(search))
-                );
-            }
-            if (filter !== 'all') {
-                filteredClients = filteredClients.filter(c => c.type === filter);
-            }
-            
-            if (filteredClients.length === 0) {
+            let filtered = clients;
+            if (search) filtered = filtered.filter(c => c.name.toLowerCase().includes(search) || c.phone.includes(search) || (c.address && c.address.toLowerCase().includes(search)));
+            if (filter !== 'all') filtered = filtered.filter(c => c.type === filter);
+            if (filtered.length === 0) {
                 list.innerHTML = '<div class="empty-state"><span class="emoji">👥</span>لا يوجد عملاء</div>';
             } else {
-                list.innerHTML = filteredClients.map(c => `
-                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--gray-50);border-radius:var(--radius);flex-wrap:wrap;gap:8px;">
+                list.innerHTML = filtered.map(c => `
+                <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:var(--gray-50);border-radius:var(--radius);margin-bottom:8px;flex-wrap:wrap;gap:8px;">
                     <div>
-                        <strong>${c.type === 'restaurant' ? '🏢' : '👤'} ${c.name}</strong>
-                        <span class="badge ${c.type === 'restaurant' ? 'badge-red' : 'badge-outline'}" style="margin-right:8px;">${c.type === 'restaurant' ? 'مطعم' : 'عميل'}</span>
+                        <strong>${c.type==='restaurant'?'🏢':'👤'} ${c.name}</strong>
+                        <span class="badge ${c.type==='restaurant'?'badge-red':'badge-outline'}" style="margin-right:8px;">${c.type==='restaurant'?'مطعم':'عميل'}</span>
                         <span style="margin-right:12px;color:var(--gray-500);">📞 ${c.phone}</span>
-                        <span style="margin-right:12px;color:var(--gray-500);">📍 ${c.address || 'بدون عنوان'}</span>
+                        <span style="margin-right:12px;color:var(--gray-500);">📍 ${c.address||'بدون عنوان'}</span>
                     </div>
                     <div style="display:flex;gap:6px;">
-                        <button class="btn btn-outline btn-xs" onclick="editClient('${c.id}')">✏️ تعديل</button>
-                        <button class="btn btn-danger btn-xs" onclick="deleteClient('${c.id}')">🗑️ حذف</button>
+                        <button class="btn btn-outline btn-xs" onclick="editClient('${c.id}')">✏️</button>
+                        <button class="btn btn-danger btn-xs" onclick="deleteClient('${c.id}')">🗑️</button>
                     </div>
                 </div>`).join('');
             }
@@ -1259,15 +1154,12 @@
             const phone = document.getElementById('clientPhone')?.value.trim();
             const address = document.getElementById('clientAddress')?.value.trim();
             const type = document.getElementById('clientType')?.value || 'client';
-            if (!name || !phone) {
-                showToast('⚠️ الاسم ورقم الهاتف مطلوبين', 'error');
-                return;
-            }
+            if (!name || !phone) { showToast('⚠️ الاسم ورقم الهاتف مطلوبين', 'error'); return; }
             const data = loadAll();
             data.clients.push({ id: uuid(), type, name, phone, address });
             saveClients(data.clients);
             renderPage('clients');
-            showToast('✅ تم إضافة العميل بنجاح');
+            showToast('✅ تم إضافة العميل');
         };
 
         window.editClient = function(id) {
@@ -1277,21 +1169,11 @@
             const modal = document.getElementById('modalContainer');
             document.getElementById('modalContent').innerHTML = `
             <h3>✏️ تعديل بيانات العميل</h3>
-            <label>🏷️ النوع</label>
-            <select id="editClientType">
-                <option value="client" ${client.type === 'client' ? 'selected' : ''}>👤 عميل</option>
-                <option value="restaurant" ${client.type === 'restaurant' ? 'selected' : ''}>🏢 مطعم</option>
-            </select>
-            <label style="margin-top:10px;">🏢 الاسم</label>
-            <input type="text" id="editClientName" value="${client.name}">
-            <label style="margin-top:10px;">📞 رقم الهاتف</label>
-            <input type="tel" id="editClientPhone" value="${client.phone}">
-            <label style="margin-top:10px;">📍 العنوان</label>
-            <input type="text" id="editClientAddress" value="${client.address || ''}">
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="saveClientEdit('${id}')">💾 حفظ التعديلات</button>
-                <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
-            </div>`;
+            <label>🏷️ النوع</label><select id="editClientType"><option value="client" ${client.type==='client'?'selected':''}>👤 عميل</option><option value="restaurant" ${client.type==='restaurant'?'selected':''}>🏢 مطعم</option></select>
+            <label style="margin-top:10px;">🏢 الاسم</label><input type="text" id="editClientName" value="${client.name}">
+            <label style="margin-top:10px;">📞 رقم الهاتف</label><input type="tel" id="editClientPhone" value="${client.phone}">
+            <label style="margin-top:10px;">📍 العنوان</label><input type="text" id="editClientAddress" value="${client.address||''}">
+            <div class="modal-buttons"><button class="btn btn-primary" onclick="saveClientEdit('${id}')">💾 حفظ</button><button class="btn btn-outline" onclick="closeModal()">إلغاء</button></div>`;
             modal.style.display = 'flex';
         };
 
@@ -1300,22 +1182,13 @@
             const phone = document.getElementById('editClientPhone')?.value.trim();
             const address = document.getElementById('editClientAddress')?.value.trim();
             const type = document.getElementById('editClientType')?.value;
-            if (!name || !phone) {
-                showToast('⚠️ الاسم والهاتف مطلوبين', 'error');
-                return;
-            }
+            if (!name || !phone) { showToast('⚠️ الاسم والهاتف مطلوبين', 'error'); return; }
             const data = loadAll();
             const client = data.clients.find(c => c.id === id);
-            if (client) {
-                client.name = name;
-                client.phone = phone;
-                client.address = address;
-                client.type = type;
-                saveClients(data.clients);
-                closeModal();
-                renderClientsList();
-                showToast('✅ تم تعديل بيانات العميل');
-            }
+            if (client) { client.name = name; client.phone = phone; client.address = address; client.type = type; saveClients(data.clients); }
+            closeModal();
+            renderClientsList();
+            showToast('✅ تم تعديل بيانات العميل');
         };
 
         window.deleteClient = function(id) {
@@ -1329,42 +1202,23 @@
 
         window.exportClients = function() {
             const clients = loadAll().clients;
-            if (clients.length === 0) {
-                showToast('⚠️ لا يوجد عملاء للتصدير', 'error');
-                return;
-            }
-            const exportData = clients.map(c => ({
-                'النوع': c.type === 'restaurant' ? 'مطعم' : 'عميل',
-                'الاسم': c.name,
-                'رقم الهاتف': c.phone,
-                'العنوان': c.address || 'غير محدد'
-            }));
-            exportToExcel(exportData, 'العملاء.csv');
+            if (clients.length === 0) { showToast('⚠️ لا يوجد عملاء', 'error'); return; }
+            exportToExcel(clients.map(c => ({ 'النوع': c.type==='restaurant'?'مطعم':'عميل', 'الاسم': c.name, 'الهاتف': c.phone, 'العنوان': c.address||'' })), 'العملاء.csv');
         };
 
         // ==================== PAGE 4: INVENTORY ====================
         function renderInventory(container) {
-            const inventory = loadAll().inventory;
-            let html = `
+            container.innerHTML = `
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">📦</div>
-                    <div class="card-title">إدارة المخزن</div>
-                </div>
+                <div class="card-header"><div class="icon-circle">📦</div><div class="card-title">إدارة المخزن</div></div>
                 <div style="display:flex;gap:10px;margin-bottom:15px;flex-wrap:wrap;">
                     <button class="btn btn-primary btn-sm" onclick="showInventoryModal('add')">➕ إضافة مخزون</button>
                     <button class="btn btn-outline btn-sm" onclick="showInventoryModal('withdraw')">➖ سحب مخزون</button>
                     <button class="btn btn-export btn-sm" onclick="exportInventory()">📥 تصدير Excel</button>
                 </div>
                 <input type="text" id="invSearch" placeholder="🔍 بحث في المخزون..." oninput="renderInventoryTable()" style="margin-bottom:10px;">
-                <div style="overflow-x:auto;">
-                    <table class="price-table" id="invTable">
-                        <thead><tr><th>النوع</th><th>الاسم</th><th>الكمية/الوزن</th><th>تاريخ الإضافة</th><th>إجراءات</th></tr></thead>
-                        <tbody></tbody>
-                    </table>
-                </div>
+                <div style="overflow-x:auto;"><table class="price-table" id="invTable"><thead><tr><th>النوع</th><th>الاسم</th><th>الكمية/الوزن</th><th>تاريخ التحديث</th><th>إجراءات</th></tr></thead><tbody></tbody></table></div>
             </div>`;
-            container.innerHTML = html;
             renderInventoryTable();
         }
 
@@ -1379,13 +1233,11 @@
             } else {
                 tbody.innerHTML = filtered.map(i => `
                 <tr>
-                    <td>${i.type === 'goods' ? 'بضاعة' : 'مستهلكات'}</td>
+                    <td>${i.type==='goods'?'بضاعة':'مستهلكات'}</td>
                     <td>${i.name}</td>
-                    <td>${i.type === 'goods' ? i.weight + ' كجم' : i.quantity + ' قطعة'}</td>
+                    <td>${i.type==='goods'?i.weight+' كجم':i.quantity+' قطعة'}</td>
                     <td>${i.date}</td>
-                    <td>
-                        <button class="btn btn-danger btn-xs" onclick="deleteInventoryItem('${i.id}')">🗑️ حذف</button>
-                    </td>
+                    <td><button class="btn btn-danger btn-xs" onclick="deleteInventoryItem('${i.id}')">🗑️</button></td>
                 </tr>`).join('');
             }
         }
@@ -1393,6 +1245,10 @@
         window.deleteInventoryItem = function(id) {
             if (!confirm('هل تريد حذف هذا العنصر من المخزن؟')) return;
             const data = loadAll();
+            const item = data.inventory.find(i => i.id === id);
+            if (item) {
+                addInventoryLog(item.name, item.type, item.type==='goods'?item.weight:item.quantity, 0, 'حذف');
+            }
             data.inventory = data.inventory.filter(i => i.id !== id);
             saveInventory(data.inventory);
             renderInventoryTable();
@@ -1401,38 +1257,27 @@
 
         window.exportInventory = function() {
             const inventory = loadAll().inventory;
-            if (inventory.length === 0) {
-                showToast('⚠️ المخزن فارغ', 'error');
-                return;
-            }
-            const exportData = inventory.map(i => ({
-                'النوع': i.type === 'goods' ? 'بضاعة' : 'مستهلكات',
-                'الاسم': i.name,
-                'الكمية/الوزن': i.type === 'goods' ? i.weight + ' كجم' : i.quantity + ' قطعة',
-                'تاريخ الإضافة': i.date
-            }));
-            exportToExcel(exportData, 'المخزن.csv');
+            if (inventory.length === 0) { showToast('⚠️ المخزن فارغ', 'error'); return; }
+            exportToExcel(inventory.map(i => ({ 'النوع': i.type==='goods'?'بضاعة':'مستهلكات', 'الاسم': i.name, 'الكمية/الوزن': i.type==='goods'?i.weight+' كجم':i.quantity+' قطعة', 'تاريخ التحديث': i.date })), 'المخزن.csv');
         };
 
         window.showInventoryModal = function(mode) {
             const modal = document.getElementById('modalContainer');
-            const content = document.getElementById('modalContent');
-            content.innerHTML = `
-            <h3>${mode === 'add' ? 'إضافة مخزون' : 'سحب مخزون'}</h3>
-            <select id="invType" onchange="toggleInvFields()">
-                <option value="goods">بضاعة</option>
-                <option value="consumable">مستهلكات</option>
-            </select>
-            <input id="invName" placeholder="اسم الصنف" style="margin-top:8px;">
+            document.getElementById('modalContent').innerHTML = `
+            <h3>${mode==='add'?'➕ إضافة مخزون':'➖ سحب مخزون'}</h3>
+            <select id="invType" onchange="toggleInvFields()"><option value="goods">بضاعة</option><option value="consumable">مستهلكات</option></select>
+            <input id="invName" placeholder="اسم الصنف" style="margin-top:8px;" list="invSuggestions">
+            <datalist id="invSuggestions"></datalist>
             <div id="invWeightField" style="margin-top:8px;"><input id="invWeight" placeholder="الوزن (كجم)" type="number" step="0.001"></div>
             <div id="invQtyField" style="display:none;margin-top:8px;"><input id="invQty" placeholder="العدد" type="number"></div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="${mode === 'add' ? 'addInventory()' : 'withdrawInventory()'}">${mode === 'add' ? 'إضافة' : 'سحب'}</button>
-                <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
-            </div>`;
+            <div class="modal-buttons"><button class="btn btn-primary" onclick="${mode==='add'?'addInventory()':'withdrawInventory()'}">${mode==='add'?'إضافة':'سحب'}</button><button class="btn btn-outline" onclick="closeModal()">إلغاء</button></div>`;
             modal.style.display = 'flex';
             window.invMode = mode;
             toggleInvFields();
+            const data = loadAll();
+            const suggestions = document.getElementById('invSuggestions');
+            const names = [...new Set(data.inventory.map(i => i.name))];
+            suggestions.innerHTML = names.map(n => `<option value="${n}">`).join('');
         };
 
         window.toggleInvFields = function() {
@@ -1446,14 +1291,31 @@
             const name = document.getElementById('invName').value.trim();
             if (!name) { showToast('⚠️ أدخل اسم الصنف', 'error'); return; }
             const data = loadAll();
+            let existingItem = data.inventory.find(i => i.name === name && i.type === type);
             if (type === 'goods') {
                 const weight = parseFloat(document.getElementById('invWeight').value);
                 if (!weight || weight <= 0) { showToast('⚠️ أدخل وزن صحيح', 'error'); return; }
-                data.inventory.push({ id: uuid(), type: 'goods', name, weight, quantity: 0, date: getNowString() });
+                if (existingItem) {
+                    const oldQty = existingItem.weight;
+                    existingItem.weight += weight;
+                    existingItem.date = getNowString();
+                    addInventoryLog(name, 'goods', oldQty, existingItem.weight, 'إضافة');
+                } else {
+                    data.inventory.push({ id: uuid(), type: 'goods', name, weight, quantity: 0, date: getNowString() });
+                    addInventoryLog(name, 'goods', 0, weight, 'إضافة');
+                }
             } else {
                 const qty = parseInt(document.getElementById('invQty').value);
                 if (!qty || qty <= 0) { showToast('⚠️ أدخل عدد صحيح', 'error'); return; }
-                data.inventory.push({ id: uuid(), type: 'consumable', name, weight: 0, quantity: qty, date: getNowString() });
+                if (existingItem) {
+                    const oldQty = existingItem.quantity;
+                    existingItem.quantity += qty;
+                    existingItem.date = getNowString();
+                    addInventoryLog(name, 'consumable', oldQty, existingItem.quantity, 'إضافة');
+                } else {
+                    data.inventory.push({ id: uuid(), type: 'consumable', name, weight: 0, quantity: qty, date: getNowString() });
+                    addInventoryLog(name, 'consumable', 0, qty, 'إضافة');
+                }
             }
             saveInventory(data.inventory);
             closeModal();
@@ -1462,22 +1324,28 @@
         };
 
         window.withdrawInventory = function() {
+            const type = document.getElementById('invType').value;
             const name = document.getElementById('invName').value.trim();
             const data = loadAll();
-            const item = data.inventory.find(i => i.name === name);
+            const item = data.inventory.find(i => i.name === name && i.type === type);
             if (!item) { showToast('⚠️ الصنف غير موجود', 'error'); return; }
-            const type = item.type;
             if (type === 'goods') {
                 const w = parseFloat(document.getElementById('invWeight').value);
                 if (!w || w <= 0) { showToast('⚠️ أدخل وزن صحيح للسحب', 'error'); return; }
                 if (item.weight < w) { showToast('⚠️ المخزون غير كافٍ', 'error'); return; }
+                const oldQty = item.weight;
                 item.weight -= w;
+                item.date = getNowString();
+                addInventoryLog(name, 'goods', oldQty, item.weight, 'سحب');
                 if (item.weight <= 0) data.inventory = data.inventory.filter(i => i.id !== item.id);
             } else {
                 const q = parseInt(document.getElementById('invQty').value);
                 if (!q || q <= 0) { showToast('⚠️ أدخل عدد صحيح للسحب', 'error'); return; }
                 if (item.quantity < q) { showToast('⚠️ المخزون غير كافٍ', 'error'); return; }
+                const oldQty = item.quantity;
                 item.quantity -= q;
+                item.date = getNowString();
+                addInventoryLog(name, 'consumable', oldQty, item.quantity, 'سحب');
                 if (item.quantity <= 0) data.inventory = data.inventory.filter(i => i.id !== item.id);
             }
             saveInventory(data.inventory);
@@ -1486,117 +1354,168 @@
             showToast('✅ تم السحب من المخزن');
         };
 
-        // ==================== PAGE 5: ORDER ====================
+        // ==================== PAGE 5: EXPENSES ====================
+        function renderExpensesPage(container) {
+            container.innerHTML = `
+            <div class="card">
+                <div class="card-header"><div class="icon-circle">💸</div><div class="card-title">إضافة مصروف جديد</div></div>
+                <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:end;">
+                    <div style="flex:2;min-width:160px;"><label>📝 اسم المصروف</label><input type="text" id="expName" placeholder="مثلاً: إيجار، كهرباء، بنزين..."></div>
+                    <div style="flex:1;min-width:120px;"><label>💲 القيمة (ج.م)</label><input type="number" id="expAmount" placeholder="0" step="0.5" min="0"></div>
+                    <div style="flex:2;min-width:200px;"><label>📝 تفاصيل (اختياري)</label><input type="text" id="expDetails" placeholder="أي تفاصيل إضافية..."></div>
+                    <div style="flex:0;min-width:100px;"><button class="btn btn-primary" onclick="addExpenseFromPage()">➕ إضافة</button></div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header"><div class="icon-circle">📋</div><div class="card-title">سجل المصروفات</div></div>
+                <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:10px;">
+                    <input type="date" id="expFilterDate" onchange="renderExpensesList()">
+                    <div style="display:flex;gap:6px;">
+                        <input type="text" id="expFilterSearch" placeholder="🔍 بحث..." oninput="renderExpensesList()" style="max-width:200px;">
+                        <button class="btn btn-export btn-sm" onclick="exportExpenses()">📥 تصدير Excel</button>
+                    </div>
+                </div>
+                <div id="expensesList"></div>
+                <div style="text-align:center;margin-top:16px;padding:16px;background:var(--gray-50);border-radius:var(--radius);">
+                    <strong>💸 إجمالي المصروفات المعروضة: <span id="expTotalDisplay" style="color:var(--red);font-size:1.2rem;">0</span> ج.م</strong>
+                </div>
+            </div>`;
+            renderExpensesList();
+        }
+
+        function renderExpensesList() {
+            const expenses = loadAll().expenses;
+            const date = document.getElementById('expFilterDate')?.value;
+            const search = document.getElementById('expFilterSearch')?.value.toLowerCase() || '';
+            let filtered = expenses;
+            if (date) filtered = filtered.filter(e => e.dateKey === date);
+            if (search) filtered = filtered.filter(e => e.name.toLowerCase().includes(search) || (e.details && e.details.toLowerCase().includes(search)));
+            const list = document.getElementById('expensesList');
+            const totalDisplay = document.getElementById('expTotalDisplay');
+            if (!list) return;
+            const total = filtered.reduce((s, e) => s + e.amount, 0);
+            if (totalDisplay) totalDisplay.textContent = total.toFixed(1);
+            if (filtered.length === 0) {
+                list.innerHTML = '<div class="empty-state"><span class="emoji">💸</span>لا توجد مصروفات</div>';
+            } else {
+                list.innerHTML = filtered.map(e => `
+                <div class="expense-item">
+                    <div style="flex:2;">
+                        <strong>💸 ${e.name}</strong>
+                        ${e.details ? `<span style="color:var(--gray-500);font-size:0.85rem;margin-right:8px;">📝 ${e.details}</span>` : ''}
+                        <small style="color:var(--gray-400);display:block;">📅 ${e.date}</small>
+                    </div>
+                    <div style="font-weight:700;color:var(--red);">${e.amount.toFixed(1)} ج.م</div>
+                    <div style="display:flex;gap:6px;">
+                        <button class="btn btn-outline btn-xs" onclick="editExpense('${e.id}')">✏️</button>
+                        <button class="btn btn-danger btn-xs" onclick="deleteExpenseFromPage('${e.id}')">🗑️</button>
+                    </div>
+                </div>`).join('');
+            }
+        }
+
+        window.addExpenseFromPage = function() {
+            const name = document.getElementById('expName')?.value.trim();
+            const amount = parseFloat(document.getElementById('expAmount')?.value);
+            const details = document.getElementById('expDetails')?.value.trim();
+            if (!name || isNaN(amount) || amount <= 0) { showToast('⚠️ أدخل اسم وقيمة صحيحة', 'error'); return; }
+            const data = loadAll();
+            data.expenses.unshift({ id: uuid(), name, amount, details, date: getNowString(), dateKey: getTodayString() });
+            saveExpenses(data.expenses);
+            document.getElementById('expName').value = '';
+            document.getElementById('expAmount').value = '';
+            document.getElementById('expDetails').value = '';
+            renderExpensesList();
+            showToast('💸 تم إضافة المصروف');
+        };
+
+        window.editExpense = function(id) {
+            const data = loadAll();
+            const expense = data.expenses.find(e => e.id === id);
+            if (!expense) return;
+            const modal = document.getElementById('modalContainer');
+            document.getElementById('modalContent').innerHTML = `
+            <h3>✏️ تعديل مصروف</h3>
+            <label>📝 اسم المصروف</label><input type="text" id="editExpName" value="${expense.name}">
+            <label style="margin-top:10px;">💲 القيمة (ج.م)</label><input type="number" id="editExpAmount" value="${expense.amount}" step="0.5" min="0">
+            <label style="margin-top:10px;">📝 تفاصيل</label><input type="text" id="editExpDetails" value="${expense.details || ''}">
+            <div class="modal-buttons"><button class="btn btn-primary" onclick="saveExpenseEdit('${id}')">💾 حفظ</button><button class="btn btn-outline" onclick="closeModal()">إلغاء</button></div>`;
+            modal.style.display = 'flex';
+        };
+
+        window.saveExpenseEdit = function(id) {
+            const name = document.getElementById('editExpName')?.value.trim();
+            const amount = parseFloat(document.getElementById('editExpAmount')?.value);
+            const details = document.getElementById('editExpDetails')?.value.trim();
+            if (!name || isNaN(amount) || amount <= 0) { showToast('⚠️ بيانات غير صحيحة', 'error'); return; }
+            const data = loadAll();
+            const expense = data.expenses.find(e => e.id === id);
+            if (expense) { expense.name = name; expense.amount = amount; expense.details = details; saveExpenses(data.expenses); }
+            closeModal();
+            renderExpensesList();
+            showToast('✅ تم تعديل المصروف');
+        };
+
+        window.deleteExpenseFromPage = function(id) {
+            if (!confirm('هل تريد حذف هذا المصروف؟')) return;
+            const data = loadAll();
+            data.expenses = data.expenses.filter(e => e.id !== id);
+            saveExpenses(data.expenses);
+            renderExpensesList();
+            showToast('🗑️ تم حذف المصروف');
+        };
+
+        window.exportExpenses = function() {
+            const expenses = loadAll().expenses;
+            const date = document.getElementById('expFilterDate')?.value;
+            const search = document.getElementById('expFilterSearch')?.value.toLowerCase() || '';
+            let filtered = expenses;
+            if (date) filtered = filtered.filter(e => e.dateKey === date);
+            if (search) filtered = filtered.filter(e => e.name.toLowerCase().includes(search) || (e.details && e.details.toLowerCase().includes(search)));
+            if (filtered.length === 0) { showToast('⚠️ لا توجد مصروفات', 'error'); return; }
+            exportToExcel(filtered.map(e => ({ 'اسم المصروف': e.name, 'القيمة': e.amount.toFixed(1), 'تفاصيل': e.details||'', 'التاريخ': e.date })), 'المصروفات.csv');
+        };
+
+        // ==================== PAGE 6: ORDER ====================
         let currentCart = [];
 
         function renderOrder(container) {
             const data = loadAll();
             const agents = data.agents;
-            const clients = data.clients;
             const restaurants = data.clients.filter(c => c.type === 'restaurant');
             const prices = data.prices;
-            let html = `
+            container.innerHTML = `
             <div class="card">
-                <div class="card-header">
-                    <div class="icon-circle">🧾</div>
-                    <div class="card-title">🛒 إنشاء أوردر جديد</div>
-                </div>
-                <!-- نوع الأوردر -->
-                <div style="margin-bottom:16px;">
-                    <label>🏷️ نوع الأوردر</label>
-                    <select id="orderType" onchange="onOrderTypeChange()">
-                        <option value="shop">🏪 محل</option>
-                        <option value="restaurant">🏢 مطعم</option>
-                    </select>
-                </div>
-                <!-- اختيار المطعم (يظهر فقط للأوردر مطعم) -->
+                <div class="card-header"><div class="icon-circle">🧾</div><div class="card-title">🛒 إنشاء أوردر جديد</div></div>
+                <div style="margin-bottom:16px;"><label>🏷️ نوع الأوردر</label><select id="orderType" onchange="onOrderTypeChange()"><option value="shop">🏪 محل</option><option value="restaurant">🏢 مطعم</option></select></div>
                 <div id="restaurantSelectDiv" style="display:none;margin-bottom:16px;">
                     <label>🏢 اختر المطعم</label>
-                    <select id="orderRestaurantSelect" onchange="onRestaurantSelect()">
-                        <option value="">-- اختر المطعم --</option>
-                        ${restaurants.map(r => `<option value="${r.id}">${r.name} (${r.phone})</option>`).join('')}
-                    </select>
+                    <select id="orderRestaurantSelect" onchange="onRestaurantSelect()"><option value="">-- اختر المطعم --</option>${restaurants.map(r => `<option value="${r.id}">${r.name} (${r.phone})</option>`).join('')}</select>
                     <div id="selectedRestaurantInfo" style="margin-top:8px;padding:8px;background:#f0f9ff;border-radius:8px;display:none;"></div>
                 </div>
-                <!-- معلومات العميل والمندوب -->
                 <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;">
-                    <div style="flex:1;min-width:150px;">
-                        <label>📞 رقم العميل *</label>
-                        <input type="tel" id="orderCustomerPhone" placeholder="مثال: 010xxxxxxxx" oninput="onCustomerPhoneInput()">
-                    </div>
-                    <div style="flex:2;min-width:200px;">
-                        <label>📍 عنوان العميل *</label>
-                        <input type="text" id="orderCustomerAddress" placeholder="العنوان بالتفصيل">
-                    </div>
-                    <div style="flex:1;min-width:150px;">
-                        <label>🛵 اختر المندوب *</label>
-                        <select id="orderAgentSelect">
-                            <option value="">-- اختر المندوب --</option>
-                            ${agents.map(a => `<option value="${a.id}">${a.name} - ${a.phone}</option>`).join('')}
-                        </select>
-                    </div>
+                    <div style="flex:1;min-width:150px;"><label>📞 رقم العميل *</label><input type="tel" id="orderCustomerPhone" placeholder="مثال: 010xxxxxxxx" oninput="onCustomerPhoneInput()"></div>
+                    <div style="flex:2;min-width:200px;"><label>📍 عنوان العميل *</label><input type="text" id="orderCustomerAddress" placeholder="العنوان بالتفصيل"></div>
+                    <div style="flex:1;min-width:150px;"><label>🛵 اختر المندوب *</label><select id="orderAgentSelect"><option value="">-- اختر المندوب --</option>${agents.map(a => `<option value="${a.id}">${a.name} - ${a.phone}</option>`).join('')}</select></div>
                 </div>
-                <!-- إضافة منتج للسلة -->
                 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:16px;padding:14px;background:var(--gray-50);border-radius:var(--radius);">
-                    <div style="flex:2;min-width:160px;">
-                        <label>🍗 اختر المنتج</label>
-                        <select id="orderProductSelect">
-                            ${prices.map(p => `<option value="${p.id}" data-shop="${p.shopPrice}" data-rest="${p.restPrice}">${p.name}</option>`).join('')}
-                        </select>
-                    </div>
-                    <div style="flex:1;min-width:100px;">
-                        <label>⚖️ الوزن</label>
-                        <select id="orderWeightSelect" onchange="toggleCustomWeight()">
-                            <option value="1">1 كيلو</option>
-                            <option value="0.5">نصف كيلو</option>
-                            <option value="0.25">ربع كيلو</option>
-                            <option value="custom">✍️ وزن آخر (جرام)</option>
-                        </select>
-                        <input type="number" id="orderWeightCustom" placeholder="أدخل الوزن بالجرام" min="1" step="1" style="display:none; margin-top:6px; width:100%;" oninput="handleCustomWeightInput()">
-                    </div>
-                    <div style="flex:0;min-width:70px;">
-                        <label>🔢 الكمية</label>
-                        <input type="number" id="orderQuantity" value="1" min="1" style="width:70px;text-align:center;">
-                    </div>
-                    <div style="flex:0;min-width:90px;">
-                        <button class="btn btn-outline btn-sm" onclick="addToCart()" style="width:100%;">➕ أضف للسلة</button>
-                    </div>
+                    <div style="flex:2;min-width:160px;"><label>🍗 اختر المنتج</label><select id="orderProductSelect">${prices.map(p => `<option value="${p.id}" data-shop="${p.shopPrice}" data-rest="${p.restPrice}">${p.name}</option>`).join('')}</select></div>
+                    <div style="flex:1;min-width:100px;"><label>⚖️ الوزن</label><select id="orderWeightSelect" onchange="toggleCustomWeight()"><option value="1">1 كيلو</option><option value="0.5">نصف كيلو</option><option value="0.25">ربع كيلو</option><option value="custom">✍️ وزن آخر (جرام)</option></select><input type="number" id="orderWeightCustom" placeholder="الوزن بالجرام" min="1" step="1" style="display:none;margin-top:6px;width:100%;" oninput="handleCustomWeightInput()"></div>
+                    <div style="flex:0;min-width:70px;"><label>🔢 الكمية</label><input type="number" id="orderQuantity" value="1" min="1" style="width:70px;text-align:center;"></div>
+                    <div style="flex:0;min-width:90px;"><button class="btn btn-outline btn-sm" onclick="addToCart()" style="width:100%;">➕ أضف</button></div>
                 </div>
-                <!-- السلة -->
                 <div style="margin-bottom:12px;"><strong>🧺 سلة الأوردر:</strong></div>
                 <div id="orderCart" style="min-height:60px;margin-bottom:12px;"></div>
-                <div style="text-align:left;font-weight:700;font-size:1.1rem;color:var(--gray-700);margin-bottom:16px;">
-                    💰 إجمالي المنتجات: <span class="highlight-num" id="cartSubtotal">0</span> ج.م
-                </div>
-                <!-- إضافات وتوصيل -->
+                <div style="text-align:left;font-weight:700;font-size:1.1rem;color:var(--gray-700);margin-bottom:16px;">💰 إجمالي المنتجات: <span class="highlight-num" id="cartSubtotal">0</span> ج.م</div>
                 <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:12px;padding:12px;background:#fffdf5;border-radius:var(--radius);border:1px dashed #fbbf24;">
-                    <div style="flex:2;min-width:140px;">
-                        <label>➕ إضافة شيء آخر (اختياري) - اسم الإضافة</label>
-                        <input type="text" id="extraItemName" placeholder="مثلاً: صلصة، أكياس، إلخ">
-                    </div>
-                    <div style="flex:1;min-width:100px;">
-                        <label>💲 سعر الإضافة</label>
-                        <input type="number" id="extraItemPrice" placeholder="0" value="0" min="0" step="0.5">
-                    </div>
-                    <div style="flex:0;min-width:80px;">
-                        <button class="btn btn-outline btn-sm" onclick="addExtraToCart()">➕ أضف</button>
-                    </div>
+                    <div style="flex:2;min-width:140px;"><label>➕ إضافة أخرى (اختياري)</label><input type="text" id="extraItemName" placeholder="مثلاً: صلصة، أكياس"></div>
+                    <div style="flex:1;min-width:100px;"><label>💲 السعر</label><input type="number" id="extraItemPrice" value="0" min="0" step="0.5"></div>
+                    <div style="flex:0;min-width:80px;"><button class="btn btn-outline btn-sm" onclick="addExtraToCart()">➕ أضف</button></div>
                 </div>
-                <div style="margin-bottom:16px;">
-                    <label>🚚 سعر التوصيل *</label>
-                    <input type="number" id="deliveryFee" placeholder="أدخل سعر التوصيل" value="0" min="0" step="0.5" style="max-width:200px;">
-                </div>
-                <div style="text-align:center;font-size:1.3rem;font-weight:900;color:var(--red);margin-bottom:16px;">
-                    🧾 الإجمالي الكلي: <span id="cartGrandTotal">0</span> ج.م
-                </div>
-                <div style="text-align:center;">
-                    <button class="btn btn-green" onclick="confirmOrder()" style="font-size:1.1rem;padding:14px 36px;">
-                        ✅ تأكيد الأوردر وإرسال الفواتير
-                    </button>
-                </div>
+                <div style="margin-bottom:16px;"><label>🚚 سعر التوصيل *</label><input type="number" id="deliveryFee" value="0" min="0" step="0.5" style="max-width:200px;"></div>
+                <div style="text-align:center;font-size:1.3rem;font-weight:900;color:var(--red);margin-bottom:16px;">🧾 الإجمالي الكلي: <span id="cartGrandTotal">0</span> ج.م</div>
+                <div style="text-align:center;"><button class="btn btn-green" onclick="confirmOrder()" style="font-size:1.1rem;padding:14px 36px;">✅ تأكيد الأوردر وإرسال الفواتير</button></div>
             </div>`;
-            container.innerHTML = html;
-
             onOrderTypeChange();
             updateCartDisplay();
             document.getElementById('deliveryFee')?.addEventListener('input', updateCartDisplay);
@@ -1604,21 +1523,10 @@
 
         window.onOrderTypeChange = function() {
             const type = document.getElementById('orderType').value;
-            const restDiv = document.getElementById('restaurantSelectDiv');
-            const customerPhoneInput = document.getElementById('orderCustomerPhone');
-            const customerAddressInput = document.getElementById('orderCustomerAddress');
-            
-            if (type === 'restaurant') {
-                restDiv.style.display = 'block';
-                // عند اختيار مطعم، نخفي حقلي العميل مؤقتاً حتى يتم اختيار المطعم
-                customerPhoneInput.placeholder = 'سيتم تعبئته تلقائياً من بيانات المطعم';
-                customerAddressInput.placeholder = 'سيتم تعبئته تلقائياً من بيانات المطعم';
-            } else {
-                restDiv.style.display = 'none';
-                customerPhoneInput.placeholder = 'مثال: 010xxxxxxxx';
-                customerAddressInput.placeholder = 'العنوان بالتفصيل';
-                customerPhoneInput.value = '';
-                customerAddressInput.value = '';
+            document.getElementById('restaurantSelectDiv').style.display = type === 'restaurant' ? 'block' : 'none';
+            if (type === 'shop') {
+                document.getElementById('orderCustomerPhone').value = '';
+                document.getElementById('orderCustomerAddress').value = '';
                 document.getElementById('selectedRestaurantInfo').style.display = 'none';
             }
             updateCartDisplay();
@@ -1632,38 +1540,26 @@
                 document.getElementById('orderCustomerAddress').value = '';
                 return;
             }
-            
             const data = loadAll();
             const restaurant = data.clients.find(c => c.id === restaurantId);
             if (restaurant) {
                 document.getElementById('orderCustomerPhone').value = restaurant.phone || '';
                 document.getElementById('orderCustomerAddress').value = restaurant.address || '';
                 document.getElementById('selectedRestaurantInfo').style.display = 'block';
-                document.getElementById('selectedRestaurantInfo').innerHTML = `
-                    <strong>🏢 ${restaurant.name}</strong><br>
-                    📞 ${restaurant.phone}<br>
-                    📍 ${restaurant.address || 'بدون عنوان'}
-                `;
+                document.getElementById('selectedRestaurantInfo').innerHTML = `<strong>🏢 ${restaurant.name}</strong><br>📞 ${restaurant.phone}<br>📍 ${restaurant.address||'بدون عنوان'}`;
             }
         };
 
         window.onCustomerPhoneInput = function() {
             const phone = document.getElementById('orderCustomerPhone')?.value.trim();
             const orderType = document.getElementById('orderType')?.value;
-            
-            // Only auto-fill for shop orders (individual clients)
             if (orderType === 'shop' && phone) {
                 const data = loadAll();
-                const client = data.clients.find(c => 
-                    c.type === 'client' && 
-                    c.phone.replace(/[\s\-\+]/g, '') === phone.replace(/[\s\-\+]/g, '')
-                );
+                const client = data.clients.find(c => c.type === 'client' && c.phone.replace(/[\s\-\+]/g, '') === phone.replace(/[\s\-\+]/g, ''));
                 if (client && client.address) {
                     document.getElementById('orderCustomerAddress').value = client.address;
                     document.getElementById('orderCustomerAddress').style.background = '#f0fdf4';
-                    setTimeout(() => {
-                        document.getElementById('orderCustomerAddress').style.background = '';
-                    }, 2000);
+                    setTimeout(() => { document.getElementById('orderCustomerAddress').style.background = ''; }, 2000);
                 }
             }
         };
@@ -1671,25 +1567,13 @@
         window.toggleCustomWeight = function() {
             const select = document.getElementById('orderWeightSelect');
             const customInput = document.getElementById('orderWeightCustom');
-            if (select.value === 'custom') {
-                customInput.style.display = 'block';
-                customInput.focus();
-            } else {
-                customInput.style.display = 'none';
-                customInput.value = '';
-            }
+            customInput.style.display = select.value === 'custom' ? 'block' : 'none';
+            if (select.value !== 'custom') customInput.value = '';
         };
 
         window.handleCustomWeightInput = function() {
-            const select = document.getElementById('orderWeightSelect');
-            if (select.value === 'custom') {
-                const val = document.getElementById('orderWeightCustom').value;
-                if (val === '' || parseInt(val) < 1) {
-                    document.getElementById('orderWeightCustom').classList.add('error');
-                } else {
-                    document.getElementById('orderWeightCustom').classList.remove('error');
-                }
-            }
+            const val = document.getElementById('orderWeightCustom').value;
+            document.getElementById('orderWeightCustom').classList.toggle('error', val !== '' && parseInt(val) < 1);
         };
 
         window.addToCart = function() {
@@ -1699,76 +1583,42 @@
             const qtyInput = document.getElementById('orderQuantity');
             const orderType = document.getElementById('orderType').value;
             const selectedOption = prodSelect.selectedOptions[0];
-            if (!selectedOption) { showToast('⚠️ اختر منتجاً أولاً', 'error'); return; }
-            const productId = selectedOption.value;
-            const productName = selectedOption.text.split(' -')[0];
+            if (!selectedOption) { showToast('⚠️ اختر منتجاً', 'error'); return; }
             const priceAttr = orderType === 'shop' ? 'data-shop' : 'data-rest';
             const basePrice = parseFloat(selectedOption.getAttribute(priceAttr));
             const qty = parseInt(qtyInput.value) || 1;
             if (qty < 1) { showToast('⚠️ الكمية يجب أن تكون 1 على الأقل', 'error'); return; }
-
             let weight, weightLabel;
             if (weightSelect.value === 'custom') {
                 const grams = parseFloat(customWeightInput.value);
-                if (isNaN(grams) || grams <= 0) {
-                    showToast('⚠️ الرجاء إدخال وزن صحيح بالجرامات', 'error');
-                    customWeightInput.classList.add('error');
-                    return;
-                }
+                if (isNaN(grams) || grams <= 0) { showToast('⚠️ أدخل وزن صحيح', 'error'); customWeightInput.classList.add('error'); return; }
                 weight = grams / 1000;
                 weightLabel = grams >= 1000 ? `${(grams/1000).toFixed(1)} كجم` : `${grams} جرام`;
             } else {
                 weight = parseFloat(weightSelect.value);
                 weightLabel = weight === 1 ? '1 كيلو' : weight === 0.5 ? 'نصف كيلو' : 'ربع كيلو';
             }
-            const itemPrice = basePrice * weight;
-            const totalItemPrice = itemPrice * qty;
-
             currentCart.push({
-                cartId: uuid(),
-                productId,
-                productName,
-                basePrice,
-                weight,
-                weightLabel,
-                qty,
-                itemPrice,
-                totalItemPrice,
-                isExtra: false,
+                cartId: uuid(), productId: selectedOption.value, productName: selectedOption.text.split(' -')[0],
+                basePrice, weight, weightLabel, qty, itemPrice: basePrice * weight, totalItemPrice: basePrice * weight * qty, isExtra: false
             });
-
-            if (weightSelect.value === 'custom') {
-                customWeightInput.value = '';
-                customWeightInput.style.display = 'none';
-                weightSelect.value = '1';
-            }
+            if (weightSelect.value === 'custom') { customWeightInput.value = ''; customWeightInput.style.display = 'none'; weightSelect.value = '1'; }
             updateCartDisplay();
-            showToast('✅ تمت إضافة المنتج للسلة');
+            showToast('✅ تمت الإضافة');
         };
 
         window.addExtraToCart = function() {
-            const nameInput = document.getElementById('extraItemName');
-            const priceInput = document.getElementById('extraItemPrice');
-            const name = nameInput.value.trim();
-            const price = parseFloat(priceInput.value) || 0;
-            if (!name) { showToast('⚠️ اكتب اسم الإضافة أولاً', 'error'); return; }
-            if (price <= 0) { showToast('⚠️ أدخل سعر الإضافة (أكبر من صفر)', 'error'); return; }
+            const name = document.getElementById('extraItemName').value.trim();
+            const price = parseFloat(document.getElementById('extraItemPrice').value) || 0;
+            if (!name || price <= 0) { showToast('⚠️ أدخل اسم وسعر الإضافة', 'error'); return; }
             currentCart.push({
-                cartId: uuid(),
-                productId: null,
-                productName: '➕ ' + name,
-                basePrice: price,
-                weight: 1,
-                weightLabel: '',
-                qty: 1,
-                itemPrice: price,
-                totalItemPrice: price,
-                isExtra: true,
+                cartId: uuid(), productId: null, productName: '➕ ' + name,
+                basePrice: price, weight: 1, weightLabel: '', qty: 1, itemPrice: price, totalItemPrice: price, isExtra: true
             });
-            nameInput.value = '';
-            priceInput.value = '0';
+            document.getElementById('extraItemName').value = '';
+            document.getElementById('extraItemPrice').value = '0';
             updateCartDisplay();
-            showToast('✅ تمت إضافة العنصر الإضافي للسلة');
+            showToast('✅ تمت الإضافة');
         };
 
         window.removeFromCart = function(cartId) {
@@ -1781,31 +1631,20 @@
             const subtotalEl = document.getElementById('cartSubtotal');
             const grandTotalEl = document.getElementById('cartGrandTotal');
             const deliveryFee = parseFloat(document.getElementById('deliveryFee')?.value) || 0;
-            if (!cartContainer || !subtotalEl || !grandTotalEl) return;
+            if (!cartContainer) return;
             if (currentCart.length === 0) {
-                cartContainer.innerHTML =
-                '<div class="empty-state"><span class="emoji">🛒</span>السلة فارغة - أضف منتجات من الأعلى</div>';
+                cartContainer.innerHTML = '<div class="empty-state"><span class="emoji">🛒</span>السلة فارغة</div>';
                 subtotalEl.textContent = '0';
                 grandTotalEl.textContent = deliveryFee.toFixed(1);
                 return;
             }
             let subtotal = 0;
-            cartContainer.innerHTML = currentCart.map(c => {
-                subtotal += c.totalItemPrice;
-                return `
+            cartContainer.innerHTML = currentCart.map(c => { subtotal += c.totalItemPrice; return `
                 <div class="cart-item">
-                    <div class="cart-item-info">
-                        ${c.productName}
-                        ${c.weightLabel ? `<span class="weight-badge">${c.weightLabel}</span>` : ''}
-                        ${c.qty > 1 ? `<span class="badge badge-outline">×${c.qty}</span>` : ''}
-                        ${c.isExtra ? '<span style="color:#f59e0b;font-size:0.8rem;">(إضافة)</span>' : ''}
-                    </div>
+                    <div class="cart-item-info">${c.productName} ${c.weightLabel?`<span class="weight-badge">${c.weightLabel}</span>`:''} ${c.qty>1?`<span class="badge badge-outline">×${c.qty}</span>`:''} ${c.isExtra?'<span style="color:#f59e0b;">(إضافة)</span>':''}</div>
                     <div class="cart-item-price">${c.totalItemPrice.toFixed(1)} ج.م</div>
-                    <div class="cart-item-actions">
-                        <button class="btn btn-danger btn-xs" onclick="removeFromCart('${c.cartId}')">✖</button>
-                    </div>
-                </div>`;
-            }).join('');
+                    <div class="cart-item-actions"><button class="btn btn-danger btn-xs" onclick="removeFromCart('${c.cartId}')">✖</button></div>
+                </div>`; }).join('');
             subtotalEl.textContent = subtotal.toFixed(1);
             grandTotalEl.textContent = (subtotal + deliveryFee).toFixed(1);
         }
@@ -1817,126 +1656,83 @@
             const orderType = document.getElementById('orderType').value;
             const deliveryFee = parseFloat(document.getElementById('deliveryFee').value) || 0;
             const restaurantId = orderType === 'restaurant' ? document.getElementById('orderRestaurantSelect').value : null;
-
             let hasError = false;
             if (!customerPhone) { document.getElementById('orderCustomerPhone').classList.add('error'); hasError = true; }
             if (!customerAddress) { document.getElementById('orderCustomerAddress').classList.add('error'); hasError = true; }
             if (!agentId) { document.getElementById('orderAgentSelect').classList.add('error'); hasError = true; }
             if (currentCart.length === 0) hasError = true;
-            if (orderType === 'restaurant' && !restaurantId) { 
-                document.getElementById('orderRestaurantSelect').classList.add('error'); 
-                hasError = true; 
-            }
-            if (hasError) { 
-                showToast('⚠️ جميع الحقول المطلوبة ممنوع تركها فارغة', 'error'); 
-                return; 
-            }
-
+            if (orderType === 'restaurant' && !restaurantId) { document.getElementById('orderRestaurantSelect').classList.add('error'); hasError = true; }
+            if (hasError) { showToast('⚠️ أكمل جميع الحقول المطلوبة', 'error'); return; }
             const data = loadAll();
             const agent = data.agents.find(a => a.id === agentId);
             if (!agent) { showToast('⚠️ المندوب غير موجود', 'error'); return; }
-
-            const subtotal = currentCart.reduce((sum, c) => sum + c.totalItemPrice, 0);
+            const subtotal = currentCart.reduce((s, c) => s + c.totalItemPrice, 0);
             const grandTotal = subtotal + deliveryFee;
-
-            let restaurantName = '';
-            let restaurantPhone = '';
+            let restaurantName = '', restaurantPhone = '';
             if (orderType === 'restaurant' && restaurantId) {
                 const restaurant = data.clients.find(c => c.id === restaurantId);
-                if (restaurant) {
-                    restaurantName = restaurant.name;
-                    restaurantPhone = restaurant.phone;
-                }
+                if (restaurant) { restaurantName = restaurant.name; restaurantPhone = restaurant.phone; }
             }
-
             const orderData = {
-                invoiceId: uuid(),
-                type: orderType,
-                date: getNowString(),
-                dateKey: getTodayString(),
-                customerPhone,
-                customerAddress,
-                agentId: agent.id,
-                agentName: agent.name,
-                agentPhone: agent.phone,
-                restaurantId: orderType === 'restaurant' ? restaurantId : null,
-                restaurantName: restaurantName,
-                restaurantPhone: restaurantPhone,
-                cart: JSON.parse(JSON.stringify(currentCart)),
-                subtotal,
-                deliveryFee,
-                grandTotal,
+                invoiceId: uuid(), type: orderType, date: getNowString(), dateKey: getTodayString(),
+                customerPhone, customerAddress, agentId: agent.id, agentName: agent.name, agentPhone: agent.phone,
+                restaurantId, restaurantName, restaurantPhone,
+                cart: JSON.parse(JSON.stringify(currentCart)), subtotal, deliveryFee, grandTotal
             };
-
             data.orders.unshift(orderData);
             saveOrders(data.orders);
             checkDailyReset();
-
-            // رسائل واتساب
             if (orderType === 'shop') {
-                const cMsg = buildCustomerInvoice(orderData);
-                const aMsg = buildAgentInvoice(orderData);
-                sendWhatsapp(customerPhone, cMsg);
-                sendWhatsapp(agent.phone, aMsg);
-                showToast('✅ تم إنشاء أوردر المحل وإرسال الرسائل');
+                sendWhatsapp(customerPhone, buildCustomerInvoice(orderData));
+                sendWhatsapp(agent.phone, buildAgentInvoice(orderData));
             } else {
-                const rMsg = buildRestaurantInvoice(orderData);
-                sendWhatsapp(restaurantPhone, rMsg);
-                if (agent && agent.phone) {
-                    const aMsg = buildAgentInvoice(orderData);
-                    sendWhatsapp(agent.phone, aMsg);
-                }
-                showToast('✅ تم إنشاء أوردر المطعم وإرسال الفواتير');
+                if (restaurantPhone) sendWhatsapp(restaurantPhone, buildRestaurantInvoice(orderData));
+                if (agent.phone) sendWhatsapp(agent.phone, buildAgentInvoice(orderData));
             }
-
+            showToast('✅ تم إنشاء الأوردر وإرسال الفواتير');
             currentCart = [];
             renderPage('order');
         };
 
         function buildCustomerInvoice(order) {
-            let msg = `🧾 *فاتورة طيور الحلال*\n📅 ${order.date}\n🆔 رقم الفاتورة: *${order.invoiceId}*\n━━━━━━━━━━━━━━━\n📋 *تفاصيل الطلب:*\n`;
-            order.cart.forEach((c, i) => { msg +=
-                `  ${i+1}- ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
+            let msg = `🧾 *فاتورة طيور الحلال*\n📅 ${order.date}\n🆔 *${order.invoiceId}*\n━━━━━━━━━━━━━━━\n📋 *تفاصيل الطلب:*\n`;
+            order.cart.forEach((c, i) => { msg += `  ${i+1}- ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
             if (order.deliveryFee > 0) msg += `🚚 رسوم التوصيل: ${order.deliveryFee.toFixed(1)} ج.م\n`;
-            msg += `💰 *الإجمالي الكلي: ${order.grandTotal.toFixed(1)} ج.م*\n📍 العنوان: ${order.customerAddress}\n🛵 المندوب: ${order.agentName}\nشكراً لتعاملكم مع طيور الحلال 🐓`;
+            msg += `💰 *الإجمالي: ${order.grandTotal.toFixed(1)} ج.م*\n📍 العنوان: ${order.customerAddress}\n🛵 المندوب: ${order.agentName}\nشكراً لتعاملكم مع طيور الحلال 🐓`;
             return msg;
         }
 
         function buildAgentInvoice(order) {
-            let msg = `🚚 *أوردر توصيل - طيور الحلال*\n🆔 رقم الفاتورة: *${order.invoiceId}*\n📅 ${order.date}\n━━━━━━━━━━━━━━━\n📋 *الطلب:*\n`;
-            order.cart.forEach(c => { msg +=
-                `  - ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
+            let msg = `🚚 *أوردر توصيل - طيور الحلال*\n🆔 *${order.invoiceId}*\n📅 ${order.date}\n━━━━━━━━━━━━━━━\n📋 *الطلب:*\n`;
+            order.cart.forEach(c => { msg += `  - ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
             if (order.deliveryFee > 0) msg += `🚚 التوصيل: ${order.deliveryFee.toFixed(1)} ج.م\n`;
             msg += `💰 الإجمالي: ${order.grandTotal.toFixed(1)} ج.م\n📍 *عنوان العميل:* ${order.customerAddress}\n📞 *رقم العميل:* ${order.customerPhone}\n✅ بالتوفيق يا ${order.agentName}!`;
             return msg;
         }
 
         function buildRestaurantInvoice(order) {
-            let msg = `🏢 *فاتورة مطعم - طيور الحلال*\n📅 ${order.date}\n🆔 رقم الفاتورة: *${order.invoiceId}*\n🏢 المطعم: ${order.restaurantName}\n━━━━━━━━━━━━━━━\n📋 *الطلب:*\n`;
-            order.cart.forEach(c => { msg +=
-                `  - ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
+            let msg = `🏢 *فاتورة مطعم - طيور الحلال*\n📅 ${order.date}\n🆔 *${order.invoiceId}*\n🏢 المطعم: ${order.restaurantName}\n━━━━━━━━━━━━━━━\n📋 *الطلب:*\n`;
+            order.cart.forEach(c => { msg += `  - ${c.productName} ${c.weightLabel?'('+c.weightLabel+')':''} ${c.qty>1?'×'+c.qty:''}  :  ${c.totalItemPrice.toFixed(1)} ج.م\n`; });
             if (order.deliveryFee > 0) msg += `🚚 التوصيل: ${order.deliveryFee.toFixed(1)} ج.م\n`;
-            msg += `💰 *الإجمالي الكلي: ${order.grandTotal.toFixed(1)} ج.م*\n📍 العنوان: ${order.customerAddress}\n🛵 المندوب: ${order.agentName}\nشكراً لتعاملكم مع طيور الحلال 🐓`;
+            msg += `💰 *الإجمالي: ${order.grandTotal.toFixed(1)} ج.م*\n📍 العنوان: ${order.customerAddress}\n🛵 المندوب: ${order.agentName}\nشكراً لتعاملكم مع طيور الحلال 🐓`;
             return msg;
         }
 
         window.sendWhatsapp = function(phone, message) {
             const formattedPhone = formatPhoneForWhatsapp(phone);
-            const encodedMsg = encodeURIComponent(message);
-            const url = `https://wa.me/${formattedPhone}?text=${encodedMsg}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/${formattedPhone}?text=${encodeURIComponent(message)}`, '_blank');
         };
 
-        // ==================== PAGE 6: RECORDS (FULLY INTEGRATED) ====================
+        // ==================== PAGE 7: RECORDS ====================
         function renderRecords(container) {
             container.innerHTML = `
             <div class="card">
                 <div class="tabs" id="recordsTabs">
-                    <button class="tab-btn active" data-tab="invoices"> سجل الفواتير</button>
-                    <button class="tab-btn" data-tab="expenses"> سجل المصروفات</button>
-                    <button class="tab-btn" data-tab="clients"> سجل العملاء</button>
-                    <button class="tab-btn" data-tab="profits"> سجل الأرباح</button>
-                    <button class="tab-btn" data-tab="consumables"> سجل المستهلكات</button>
+                    <button class="tab-btn active" data-tab="invoices">📋 سجل الفواتير</button>
+                    <button class="tab-btn" data-tab="expenses">💸 سجل المصروفات</button>
+                    <button class="tab-btn" data-tab="clients">👥 سجل العملاء</button>
+                    <button class="tab-btn" data-tab="profits">💰 سجل الأرباح</button>
+                    <button class="tab-btn" data-tab="consumables">📦 سجل المستهلكات</button>
                 </div>
                 <div id="recordsTabContent"></div>
             </div>`;
@@ -1970,7 +1766,7 @@
             if (tab === 'invoices') items = data.orders;
             else if (tab === 'expenses') items = data.expenses;
             else if (tab === 'clients') items = data.clients;
-            else if (tab === 'consumables') items = data.inventory.filter(i => i.type === 'consumable');
+            else if (tab === 'consumables') items = data.inventoryLog;
             else if (tab === 'profits') { renderProfitTab(date); return; }
 
             if (date) items = items.filter(i => (i.dateKey || i.date?.split(',')[0]) === date);
@@ -1978,14 +1774,15 @@
 
             const list = document.getElementById('recTabList');
             if (!list) return;
+
             if (tab === 'invoices') {
                 list.innerHTML = items.map(o => `
-                <div class="invoice-card" id="inv-${o.invoiceId}" style="margin-bottom:8px;">
+                <div class="invoice-card" id="inv-${o.invoiceId}">
                     <div class="invoice-summary" onclick="toggleInvoiceCard('${o.invoiceId}')">
                         <div>
-                            <strong>🧾 ${o.invoiceId.substring(0, 12)}...</strong>
+                            <strong>🧾 ${o.invoiceId.substring(0,12)}...</strong>
                             <span style="margin-right:10px;">📅 ${o.date}</span>
-                            <span class="badge ${o.type === 'restaurant' ? 'badge-red' : 'badge-outline'}">${o.type === 'restaurant' ? 'مطعم' : 'محل'}</span>
+                            <span class="badge ${o.type==='restaurant'?'badge-red':'badge-outline'}">${o.type==='restaurant'?'مطعم':'محل'}</span>
                             <span class="badge badge-red">💰 ${o.grandTotal.toFixed(1)} ج.م</span>
                         </div>
                         <div style="display:flex;gap:6px;" onclick="event.stopPropagation();">
@@ -1995,42 +1792,43 @@
                         </div>
                     </div>
                     <div class="invoice-details" id="invoice-details-${o.invoiceId}">
-                        <p><strong>النوع:</strong> ${o.type === 'shop' ? 'محل' : 'مطعم'}</p>
-                        ${o.type==='restaurant'?`<p><strong>المطعم:</strong> ${o.restaurantName} (${o.restaurantPhone})</p>`:''}
+                        <p><strong>النوع:</strong> ${o.type==='shop'?'محل':'مطعم'} ${o.type==='restaurant'?`- ${o.restaurantName}`:''}</p>
                         <p><strong>العميل:</strong> ${o.customerPhone}</p>
                         <p><strong>العنوان:</strong> ${o.customerAddress}</p>
                         <p><strong>المندوب:</strong> ${o.agentName} - ${o.agentPhone}</p>
                         <p><strong>المنتجات:</strong></p>
                         <ul>${o.cart.map(c=>`<li>${c.productName} ${c.weightLabel||''} ×${c.qty} = ${c.totalItemPrice.toFixed(1)} ج.م</li>`).join('')}</ul>
-                        <p><strong>توصيل:</strong> ${o.deliveryFee.toFixed(1)} ج.م | <strong>إجمالي:</strong> <span style="color:var(--red);font-weight:800;">${o.grandTotal.toFixed(1)} ج.م</span></p>
+                        <p><strong>توصيل:</strong> ${o.deliveryFee.toFixed(1)} | <strong>إجمالي:</strong> <span style="color:var(--red);font-weight:800;">${o.grandTotal.toFixed(1)} ج.م</span></p>
                     </div>
                 </div>`).join('') || '<div class="empty-state">لا توجد فواتير</div>';
             } else if (tab === 'expenses') {
                 list.innerHTML = items.map(e => `
                 <div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <div>💸 <strong>${e.name}</strong>: ${e.amount.toFixed(1)} ج.م - <small>${e.date}</small></div>
+                    <div>💸 <strong>${e.name}</strong>: ${e.amount.toFixed(1)} ج.م ${e.details?`<small style="color:var(--gray-500);">(${e.details})</small>`:''} - <small>${e.date}</small></div>
                     <button class="btn btn-danger btn-xs" onclick="deleteExpense('${e.id}')">🗑️</button>
                 </div>`).join('') || '<div class="empty-state">لا توجد مصروفات</div>';
-                list.innerHTML += `
-                <div style="margin-top:10px;text-align:center;">
-                    <button class="btn btn-sm btn-primary" onclick="addExpenseForm()">➕ إضافة مصروف</button>
-                </div>`;
             } else if (tab === 'clients') {
                 list.innerHTML = items.map(c => `
-                <div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <div>
-                        <strong>${c.type === 'restaurant' ? '🏢' : '👤'} ${c.name}</strong>
-                        <span class="badge ${c.type === 'restaurant' ? 'badge-red' : 'badge-outline'}">${c.type === 'restaurant' ? 'مطعم' : 'عميل'}</span>
-                        <span style="margin-right:8px;">📞 ${c.phone}</span>
-                        <span style="color:var(--gray-500);">📍 ${c.address || 'بدون عنوان'}</span>
-                    </div>
+                <div style="padding:10px;border-bottom:1px solid #eee;">
+                    <strong>${c.type==='restaurant'?'🏢':'👤'} ${c.name}</strong>
+                    <span class="badge ${c.type==='restaurant'?'badge-red':'badge-outline'}">${c.type==='restaurant'?'مطعم':'عميل'}</span>
+                    📞 ${c.phone} 📍 ${c.address||'بدون عنوان'}
                 </div>`).join('') || '<div class="empty-state">لا يوجد عملاء</div>';
             } else if (tab === 'consumables') {
-                list.innerHTML = items.map(i => `
+                list.innerHTML = items.map(log => `
                 <div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                    <div>📦 <strong>${i.name}</strong> - الكمية: ${i.quantity} قطعة - <small>${i.date}</small></div>
-                    <button class="btn btn-danger btn-xs" onclick="deleteInventoryItem('${i.id}')">🗑️</button>
-                </div>`).join('') || '<div class="empty-state">لا توجد مستهلكات</div>';
+                    <div>
+                        <strong>📦 ${log.itemName}</strong>
+                        <span style="margin-right:8px;">(${log.type==='goods'?'بضاعة':'مستهلكات'})</span>
+                        <span class="badge" style="background:${log.action==='إضافة'?'#059669':'#ef4444'};color:white;font-size:0.7rem;">${log.action}</span>
+                        <br><small>📅 ${log.date}</small>
+                    </div>
+                    <div style="font-weight:700;">
+                        <span style="color:var(--gray-500);">${log.quantityBefore}${log.type==='goods'?' كجم':' قطعة'}</span>
+                        ➜
+                        <span style="color:${log.action==='إضافة'?'#059669':'#ef4444'};">${log.quantityAfter}${log.type==='goods'?' كجم':' قطعة'}</span>
+                    </div>
+                </div>`).join('') || '<div class="empty-state">لا يوجد سجل للمستهلكات</div>';
             }
         };
 
@@ -2044,80 +1842,41 @@
             const list = document.getElementById('recTabList');
             if (list) list.innerHTML = `
             <div class="stat-row">
-                <div class="stat-card"><div class="stat-value">${income.toFixed(1)}</div><div class="stat-label">💰 إجمالي الإيرادات (ج.م)</div></div>
-                <div class="stat-card"><div class="stat-value">${expense.toFixed(1)}</div><div class="stat-label">💸 إجمالي المصروفات (ج.م)</div></div>
-                <div class="stat-card" style="border-color:${profit >= 0 ? '#059669' : '#ef4444'};"><div class="stat-value" style="color:${profit >= 0 ? '#059669' : '#ef4444'};">${profit.toFixed(1)}</div><div class="stat-label">📊 صافي الربح (ج.م)</div></div>
+                <div class="stat-card">
+                    <div class="stat-value">${income.toFixed(1)}</div>
+                    <div class="stat-label">💰 إجمالي الإيرادات (ج.م)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${expense.toFixed(1)}</div>
+                    <div class="stat-label">💸 إجمالي المصروفات (ج.م)</div>
+                </div>
+                <div class="stat-card" style="border-color:${profit >= 0 ? '#059669' : '#ef4444'};">
+                    <div class="stat-value" style="color:${profit >= 0 ? '#059669' : '#ef4444'};">
+                        ${profit.toFixed(1)}
+                    </div>
+                    <div class="stat-label">📊 صافي الربح (ج.م)</div>
+                </div>
             </div>
-            <div style="text-align:center;margin-top:20px;">
-                <button class="btn btn-export btn-sm" onclick="exportProfit('${date || ''}')">📥 تصدير تقرير الأرباح</button>
-            </div>`;
+            <div style="text-align:center;margin-top:20px;"><button class="btn btn-export btn-sm" onclick="exportProfit('${date||''}')">📥 تصدير تقرير الأرباح</button></div>`;
         };
 
         window.exportRecordTab = function(tab) {
             const data = loadAll();
             const date = document.getElementById('recFilterDate')?.value;
             const search = document.getElementById('recFilterSearch')?.value.toLowerCase() || '';
-            let items = [];
-            let filename = '';
-            
-            if (tab === 'invoices') {
-                items = data.orders;
-                filename = 'سجل_الفواتير.csv';
-            } else if (tab === 'expenses') {
-                items = data.expenses;
-                filename = 'سجل_المصروفات.csv';
-            } else if (tab === 'clients') {
-                items = data.clients;
-                filename = 'سجل_العملاء.csv';
-            } else if (tab === 'consumables') {
-                items = data.inventory.filter(i => i.type === 'consumable');
-                filename = 'سجل_المستهلكات.csv';
-            }
-
+            let items = [], filename = '';
+            if (tab === 'invoices') { items = data.orders; filename = 'سجل_الفواتير.csv'; }
+            else if (tab === 'expenses') { items = data.expenses; filename = 'سجل_المصروفات.csv'; }
+            else if (tab === 'clients') { items = data.clients; filename = 'سجل_العملاء.csv'; }
+            else if (tab === 'consumables') { items = data.inventoryLog; filename = 'سجل_المستهلكات.csv'; }
             if (date) items = items.filter(i => (i.dateKey || i.date?.split(',')[0]) === date);
             if (search) items = items.filter(i => JSON.stringify(i).toLowerCase().includes(search));
-
-            if (items.length === 0) {
-                showToast('⚠️ لا توجد بيانات للتصدير', 'error');
-                return;
-            }
-
+            if (items.length === 0) { showToast('⚠️ لا توجد بيانات', 'error'); return; }
             let exportData;
-            if (tab === 'invoices') {
-                exportData = items.map(o => ({
-                    'رقم الفاتورة': o.invoiceId,
-                    'التاريخ': o.date,
-                    'النوع': o.type === 'shop' ? 'محل' : 'مطعم',
-                    'المطعم': o.restaurantName || '-',
-                    'رقم العميل': o.customerPhone,
-                    'العنوان': o.customerAddress,
-                    'المندوب': o.agentName,
-                    'عدد المنتجات': o.cart.length,
-                    'المجموع الفرعي': o.subtotal.toFixed(1),
-                    'التوصيل': o.deliveryFee.toFixed(1),
-                    'الإجمالي': o.grandTotal.toFixed(1)
-                }));
-            } else if (tab === 'expenses') {
-                exportData = items.map(e => ({
-                    'الاسم': e.name,
-                    'القيمة': e.amount.toFixed(1),
-                    'التاريخ': e.date
-                }));
-            } else if (tab === 'clients') {
-                exportData = items.map(c => ({
-                    'النوع': c.type === 'restaurant' ? 'مطعم' : 'عميل',
-                    'الاسم': c.name,
-                    'الهاتف': c.phone,
-                    'العنوان': c.address || ''
-                }));
-            } else if (tab === 'consumables') {
-                exportData = items.map(i => ({
-                    'الاسم': i.name,
-                    'الكمية': i.quantity,
-                    'تاريخ الإضافة': i.date
-                }));
-            }
-
+            if (tab === 'invoices') exportData = items.map(o => ({ 'رقم الفاتورة': o.invoiceId, 'التاريخ': o.date, 'النوع': o.type==='shop'?'محل':'مطعم', 'المطعم': o.restaurantName||'-', 'العميل': o.customerPhone, 'العنوان': o.customerAddress, 'المندوب': o.agentName, 'عدد المنتجات': o.cart.length, 'الإجمالي': o.grandTotal.toFixed(1) }));
+            else if (tab === 'expenses') exportData = items.map(e => ({ 'الاسم': e.name, 'القيمة': e.amount.toFixed(1), 'تفاصيل': e.details||'', 'التاريخ': e.date }));
+            else if (tab === 'clients') exportData = items.map(c => ({ 'النوع': c.type==='restaurant'?'مطعم':'عميل', 'الاسم': c.name, 'الهاتف': c.phone, 'العنوان': c.address||'' }));
+            else if (tab === 'consumables') exportData = items.map(log => ({ 'الصنف': log.itemName, 'النوع': log.type==='goods'?'بضاعة':'مستهلكات', 'العملية': log.action, 'الكمية قبل': log.quantityBefore, 'الكمية بعد': log.quantityAfter, 'التاريخ': log.date }));
             exportToExcel(exportData, filename);
         };
 
@@ -2127,59 +1886,32 @@
             const expenses = date ? data.expenses.filter(e => e.dateKey === date) : data.expenses;
             const income = orders.reduce((s, o) => s + o.grandTotal, 0);
             const expense = expenses.reduce((s, e) => s + e.amount, 0);
-            
-            const exportData = [{
-                'التاريخ': date || 'الكل',
-                'عدد الفواتير': orders.length,
-                'إجمالي الإيرادات': income.toFixed(1),
-                'عدد المصروفات': expenses.length,
-                'إجمالي المصروفات': expense.toFixed(1),
-                'صافي الربح': (income - expense).toFixed(1)
-            }];
-            
-            exportToExcel(exportData, 'تقرير_الأرباح.csv');
+            exportToExcel([{ 'التاريخ': date||'الكل', 'عدد الفواتير': orders.length, 'الإيرادات': income.toFixed(1), 'المصروفات': expense.toFixed(1), 'الصافي': (income-expense).toFixed(1) }], 'تقرير_الأرباح.csv');
         };
 
         window.toggleInvoiceCard = function(id) {
-            const card = document.getElementById('inv-' + id);
-            const details = document.getElementById('invoice-details-' + id);
-            if (card) card.classList.toggle('expanded');
+            document.getElementById('inv-' + id)?.classList.toggle('expanded');
         };
 
         window.editInvoiceModal = function(invoiceId) {
             const data = loadAll();
             const order = data.orders.find(o => o.invoiceId === invoiceId);
             if (!order) return;
-            let cartHtml = `
-            <h3>✏️ تعديل فاتورة</h3>
-            <div style="margin-bottom:10px;">
-                <strong>رقم الفاتورة:</strong> ${order.invoiceId}<br>
-                <strong>النوع:</strong> ${order.type === 'shop' ? 'محل' : 'مطعم'}
-                ${order.type === 'restaurant' ? `<br><strong>المطعم:</strong> ${order.restaurantName}` : ''}
-            </div>
-            <h4>تعديل المنتجات:</h4>`;
+            let cartHtml = `<h3>✏️ تعديل فاتورة</h3><div style="margin-bottom:10px;"><strong>رقم:</strong> ${order.invoiceId}<br><strong>النوع:</strong> ${order.type==='shop'?'محل':'مطعم'} ${order.type==='restaurant'?`- ${order.restaurantName}`:''}</div><h4>تعديل المنتجات:</h4>`;
             order.cart.forEach((c, i) => {
                 cartHtml += `
                 <div style="display:flex;gap:5px;align-items:center;margin:5px 0;flex-wrap:wrap;">
                     <input value="${c.productName}" onchange="editCartItem('${invoiceId}',${i},'name',this.value)" style="flex:2;min-width:100px;">
-                    <input type="number" value="${c.weight}" step="0.001" onchange="editCartItem('${invoiceId}',${i},'weight',this.value)" style="flex:1;min-width:60px;" placeholder="وزن">
-                    <input type="number" value="${c.qty}" onchange="editCartItem('${invoiceId}',${i},'qty',this.value)" style="width:60px;" placeholder="كمية">
-                    <input type="number" value="${c.basePrice}" step="0.5" onchange="editCartItem('${invoiceId}',${i},'basePrice',this.value)" style="flex:1;min-width:70px;" placeholder="سعر">
+                    <input type="number" value="${c.weight}" step="0.001" onchange="editCartItem('${invoiceId}',${i},'weight',this.value)" style="flex:1;min-width:60px;">
+                    <input type="number" value="${c.qty}" onchange="editCartItem('${invoiceId}',${i},'qty',this.value)" style="width:60px;">
+                    <input type="number" value="${c.basePrice}" step="0.5" onchange="editCartItem('${invoiceId}',${i},'basePrice',this.value)" style="flex:1;min-width:70px;">
                     <span style="font-weight:700;">${c.totalItemPrice.toFixed(1)} ج.م</span>
                     <button class="btn btn-danger btn-xs" onclick="deleteCartItem('${invoiceId}',${i})">✖</button>
                 </div>`;
             });
-            cartHtml += `
-            <div style="margin-top:10px;">
-                <label>🚚 رسوم التوصيل</label>
-                <input type="number" id="editDeliveryFee" value="${order.deliveryFee}" step="0.5" onchange="editDeliveryFee('${invoiceId}', this.value)">
-            </div>
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="closeModal();refreshRecordTab('invoices')">💾 حفظ وإغلاق</button>
-            </div>`;
-            const modal = document.getElementById('modalContainer');
+            cartHtml += `<div style="margin-top:10px;"><label>🚚 رسوم التوصيل</label><input type="number" id="editDeliveryFee" value="${order.deliveryFee}" step="0.5" onchange="editDeliveryFee('${invoiceId}', this.value)"></div><div class="modal-buttons"><button class="btn btn-primary" onclick="closeModal();refreshRecordTab('invoices')">💾 حفظ</button></div>`;
             document.getElementById('modalContent').innerHTML = cartHtml;
-            modal.style.display = 'flex';
+            document.getElementById('modalContainer').style.display = 'flex';
         };
 
         window.editCartItem = function(invId, index, field, value) {
@@ -2194,7 +1926,7 @@
             order.subtotal = order.cart.reduce((s, c) => s + c.totalItemPrice, 0);
             order.grandTotal = order.subtotal + order.deliveryFee;
             saveOrders(data.orders);
-            editInvoiceModal(invId); // Refresh modal
+            editInvoiceModal(invId);
         };
 
         window.editDeliveryFee = function(invId, value) {
@@ -2207,7 +1939,7 @@
         };
 
         window.deleteCartItem = function(invId, index) {
-            if (!confirm('هل تريد حذف هذا المنتج من الفاتورة؟')) return;
+            if (!confirm('حذف هذا المنتج من الفاتورة؟')) return;
             const data = loadAll();
             const order = data.orders.find(o => o.invoiceId === invId);
             if (!order) return;
@@ -2233,7 +1965,7 @@
         };
 
         window.deleteInvoice = function(invoiceId) {
-            if (!confirm('هل أنت متأكد من حذف هذه الفاتورة؟ لا يمكن التراجع عن هذا الإجراء.')) return;
+            if (!confirm('حذف هذه الفاتورة؟ لا يمكن التراجع.')) return;
             const data = loadAll();
             data.orders = data.orders.filter(o => o.invoiceId !== invoiceId);
             saveOrders(data.orders);
@@ -2242,7 +1974,7 @@
         };
 
         window.deleteExpense = function(id) {
-            if (!confirm('هل تريد حذف هذا المصروف؟')) return;
+            if (!confirm('حذف هذا المصروف؟')) return;
             const data = loadAll();
             data.expenses = data.expenses.filter(e => e.id !== id);
             saveExpenses(data.expenses);
@@ -2250,43 +1982,7 @@
             showToast('🗑️ تم حذف المصروف');
         };
 
-        window.addExpenseForm = function() {
-            const modal = document.getElementById('modalContainer');
-            document.getElementById('modalContent').innerHTML = `
-            <h3>💸 إضافة مصروف جديد</h3>
-            <label>📝 اسم المصروف</label>
-            <input id="expName" placeholder="مثلاً: إيجار، كهرباء، بنزين...">
-            <label style="margin-top:10px;">💲 القيمة (ج.م)</label>
-            <input id="expAmount" type="number" placeholder="0" step="0.5" min="0">
-            <div class="modal-buttons">
-                <button class="btn btn-primary" onclick="addExpense()">💾 حفظ</button>
-                <button class="btn btn-outline" onclick="closeModal()">إلغاء</button>
-            </div>`;
-            modal.style.display = 'flex';
-        };
-
-        window.addExpense = function() {
-            const name = document.getElementById('expName')?.value.trim();
-            const amount = parseFloat(document.getElementById('expAmount')?.value);
-            if (!name || isNaN(amount) || amount <= 0) { 
-                showToast('⚠️ أكمل البيانات بشكل صحيح', 'error'); 
-                return; 
-            }
-            const data = loadAll();
-            data.expenses.push({ 
-                id: uuid(), 
-                name, 
-                amount, 
-                date: getNowString(), 
-                dateKey: getTodayString() 
-            });
-            saveExpenses(data.expenses);
-            closeModal();
-            refreshRecordTab('expenses');
-            showToast('💸 تم إضافة المصروف');
-        };
-
-        // ==================== PAGE 7: DAILY TOTAL ====================
+        // ==================== PAGE 8: DAILY TOTAL ====================
         function renderDaily(container) {
             checkDailyReset();
             const today = getTodayString();
@@ -2295,41 +1991,58 @@
             const todayExpenses = data.expenses.filter(e => e.dateKey === today);
             const total = todayOrders.reduce((s, o) => s + o.grandTotal, 0);
             const totalExpenses = todayExpenses.reduce((s, e) => s + e.amount, 0);
-            container.innerHTML = `
+            const net = total - totalExpenses;
+
+            let html = `
             <div class="card">
-                <div class="card-header"><div class="icon-circle">📊</div><div class="card-title">📅 إجمالي فواتير اليوم - ${today}</div></div>
+                <div class="card-header">
+                    <div class="icon-circle">📊</div>
+                    <div class="card-title">📅 إجمالي فواتير اليوم - ${today}</div>
+                </div>
                 <div class="stat-row">
-                    <div class="stat-card"><div class="stat-value">${todayOrders.length}</div><div class="stat-label">📦 عدد الأوردرات</div></div>
-                    <div class="stat-card"><div class="stat-value">${total.toFixed(1)}</div><div class="stat-label">💰 إجمالي المبيعات (ج.م)</div></div>
-                    <div class="stat-card"><div class="stat-value">${totalExpenses.toFixed(1)}</div><div class="stat-label">💸 إجمالي المصروفات (ج.م)</div></div>
-                    <div class="stat-card" style="${(total-totalExpenses) >= 0 ? 'border-color:#059669;' : 'border-color:#ef4444;'}">
-                        <div class="stat-value" style="color:${(total-totalExpenses) >= 0 ? '#059669' : '#ef4444'};">${(total - totalExpenses).toFixed(1)}</div>
+                    <div class="stat-card">
+                        <div class="stat-value">${todayOrders.length}</div>
+                        <div class="stat-label">📦 عدد الأوردرات</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${total.toFixed(1)}</div>
+                        <div class="stat-label">💰 إجمالي المبيعات (ج.م)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${totalExpenses.toFixed(1)}</div>
+                        <div class="stat-label">💸 إجمالي المصروفات (ج.م)</div>
+                    </div>
+                    <div class="stat-card" style="border-color:${net >= 0 ? '#059669' : '#ef4444'};">
+                        <div class="stat-value" style="color:${net >= 0 ? '#059669' : '#ef4444'};">
+                            ${net.toFixed(1)}
+                        </div>
                         <div class="stat-label">📊 صافي اليوم (ج.م)</div>
                     </div>
                 </div>
-                <p style="text-align:center;color:var(--gray-400);margin-top:10px;">⏰ يتصفر تلقائياً بعد الساعة 12 منتصف الليل</p>
             </div>
-            <!-- تفاصيل أوردرات اليوم -->
             <div class="card">
-                <div class="card-header"><div class="icon-circle">📋</div><div class="card-title">أوردرات اليوم</div></div>
-                <div id="todayOrdersList"></div>
-            </div>`;
-            
-            const list = document.getElementById('todayOrdersList');
-            if (todayOrders.length === 0) {
-                list.innerHTML = '<div class="empty-state">لا توجد أوردرات اليوم</div>';
-            } else {
-                list.innerHTML = todayOrders.map(o => `
-                <div class="invoice-card" style="margin-bottom:8px;">
-                    <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                        <div>
-                            <strong>${o.type === 'restaurant' ? '🏢' : '🏪'} ${o.type === 'restaurant' ? o.restaurantName : o.customerPhone}</strong>
-                            <span style="margin-right:10px;">🛵 ${o.agentName}</span>
+                <div class="card-header">
+                    <div class="icon-circle">📋</div>
+                    <div class="card-title">أوردرات اليوم</div>
+                </div>
+                <div id="todayOrdersList">
+                    ${todayOrders.length === 0
+                        ? '<div class="empty-state">لا توجد أوردرات اليوم</div>'
+                        : todayOrders.map(o => `
+                        <div class="invoice-card">
+                            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+                                <div>
+                                    <strong>${o.type === 'restaurant' ? '🏢' : '🏪'} ${o.type === 'restaurant' ? o.restaurantName : o.customerPhone}</strong>
+                                    <span style="margin-right:10px;">🛵 ${o.agentName}</span>
+                                </div>
+                                <span class="badge badge-red">💰 ${o.grandTotal.toFixed(1)} ج.م</span>
+                            </div>
                         </div>
-                        <span class="badge badge-red">💰 ${o.grandTotal.toFixed(1)} ج.م</span>
-                    </div>
-                </div>`).join('');
-            }
+                    `).join('')}
+                </div>
+            </div>`;
+
+            container.innerHTML = html;
         }
 
         function checkDailyReset() {
@@ -2340,7 +2053,7 @@
             }
         }
 
-        // ==================== INITIALIZATION ====================
+        // ==================== INIT ====================
         document.addEventListener('DOMContentLoaded', function() {
             checkDailyReset();
             navigateTo('prices');
