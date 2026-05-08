@@ -48,6 +48,98 @@
       -webkit-user-select: none;
       user-select: none;
     }
+    .restaurant-invoice {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.watermark {
+    position: absolute;
+    opacity: 0.05;
+    font-size: 60px;
+    font-weight: bold;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.invoice-header {
+    text-align: center;
+    border-bottom: 2px dashed #ddd;
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.invoice-logo-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.invoice-logo-img {
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
+}
+
+.invoice-badge {
+    display: inline-block;
+    background: #d32f2f;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.invoice-info {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.invoice-info span {
+    background: #f5f5f5;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+.invoice-table th {
+    background: #d32f2f;
+    color: white;
+    padding: 10px;
+}
+
+.invoice-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #eee;
+}
+
+.grand-total-row {
+    background: #fff5f5;
+    color: #d32f2f;
+    font-weight: bold;
+}
+
+.invoice-footer {
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+    color: #555;
+}
     /* ========== شاشة تسجيل الدخول OTP ========== */
     .login-overlay {
       position:fixed; top:0; left:0; right:0; bottom:0;
@@ -1780,91 +1872,157 @@
   };
 
   function showRestaurantInvoiceModal(order, whatsappMsg) {
+    const safeMsg = encodeURIComponent(whatsappMsg || '');
+
     const invoiceHTML = `
-      <div id="restaurantInvoicePrint" class="restaurant-invoice">
+    <div id="restaurantInvoicePrint" class="restaurant-invoice">
+
         <div class="watermark">طيور الحلال</div>
+
         <div class="invoice-header">
-          <div class="invoice-logo">🐓</div>
-          <div class="invoice-title">طيور الحلال</div>
-          <div style="color:var(--gray-500);font-size:0.8rem;">الجودة والثقة</div>
-          <div class="invoice-info" style="margin-top:10px;">
-            <span>📅 ${order.date}</span>
-            <span>🆔 ${order.invoiceId}</span>
-          </div>
-          <div class="invoice-info">
-            <span>🏢 ${order.restaurantName || 'مطعم'}</span>
-            <span>📞 ${order.customerPhone}</span>
-          </div>
-          <div class="invoice-info">
-            <span>🛵 المندوب: ${order.agentName}</span>
-            <span>📍 ${order.customerAddress}</span>
-          </div>
+
+            <div class="invoice-logo-wrapper">
+                <img src="logo.png" alt="Logo" class="invoice-logo-img">
+            </div>
+
+            <div class="invoice-badge">
+                فاتورة مطعم
+            </div>
+
+            <div class="invoice-info" style="margin-top:15px;">
+                <span>📅 ${order.date || '-'}</span>
+                <span>🆔 ${order.invoiceId || '-'}</span>
+            </div>
+
+            <div class="invoice-info">
+                <span>🏢 ${order.restaurantName || 'مطعم'}</span>
+                <span>📞 ${order.customerPhone || 'غير متوفر'}</span>
+            </div>
+
+            <div class="invoice-info">
+                <span>🛵 ${order.agentName || 'غير محدد'}</span>
+                <span>📍 ${order.customerAddress || 'غير متوفر'}</span>
+            </div>
+
         </div>
-        <table>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>الصنف</th>
-              <th>كيلو</th>
-              <th>جرام</th>
-              <th>العدد</th>
-              <th>سعر الوحدة</th>
-              <th>الإجمالي</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${order.cart.map((c, i) => {
-              const kg = c.isExtra ? '-' : (c.weight >= 1 ? Math.floor(c.weight) : 0);
-              const gram = c.isExtra ? '-' : (c.weight < 1 ? Math.round(c.weight * 1000) : ((c.weight % 1) * 1000).toFixed(0));
-              return `<tr>
-                <td>${i + 1}</td>
-                <td style="text-align:right;">${c.productName}</td>
-                <td>${kg}</td>
-                <td>${gram}</td>
-                <td>${c.qty}</td>
-                <td>${c.unitPrice.toFixed(1)} ج</td>
-                <td style="font-weight:700;">${c.total.toFixed(1)} ج</td>
-              </tr>`;
-            }).join('')}
-          </tbody>
-          <tfoot>
-            <tr>
-              <td colspan="6" style="text-align:left;font-weight:700;">الإجمالي الفرعي</td>
-              <td style="font-weight:900;">${order.subtotal.toFixed(1)} ج</td>
-            </tr>
-            ${order.deliveryFee > 0 ? `<tr>
-              <td colspan="6" style="text-align:left;font-weight:700;">🚚 التوصيل</td>
-              <td style="font-weight:900;">${order.deliveryFee.toFixed(1)} ج</td>
-            </tr>` : ''}
-            <tr>
-              <td colspan="6" style="text-align:left;font-weight:900;font-size:1.1rem;">💰 الإجمالي الكلي</td>
-              <td style="font-weight:900;font-size:1.1rem;color:var(--red);">${order.grandTotal.toFixed(1)} ج</td>
-            </tr>
-          </tfoot>
+
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>الصنف</th>
+                    <th>كيلو</th>
+                    <th>جرام</th>
+                    <th>العدد</th>
+                    <th>سعر الوحدة</th>
+                    <th>الإجمالي</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                ${order.cart.map((c, i) => {
+                    const weight = Number(c.weight || 0);
+                    const kg = c.isExtra ? '-' : Math.floor(weight);
+                    const gram = c.isExtra ? '-' : Math.round((weight % 1) * 1000);
+
+                    return `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td style="text-align:right;">
+                                ${c.productName || '-'}
+                            </td>
+                            <td>${kg}</td>
+                            <td>${gram}</td>
+                            <td>${c.qty || 0}</td>
+                            <td>${(c.unitPrice || 0).toFixed(1)} ج</td>
+                            <td>
+                                ${(c.total || 0).toFixed(1)} ج
+                            </td>
+                        </tr>
+                    `;
+                }).join('')}
+            </tbody>
+
+            <tfoot>
+                <tr>
+                    <td colspan="6">الإجمالي الفرعي</td>
+                    <td>${(order.subtotal || 0).toFixed(1)} ج</td>
+                </tr>
+
+                ${(order.deliveryFee || 0) > 0 ? `
+                    <tr>
+                        <td colspan="6">رسوم التوصيل</td>
+                        <td>${order.deliveryFee.toFixed(1)} ج</td>
+                    </tr>
+                ` : ''}
+
+                <tr class="grand-total-row">
+                    <td colspan="6">
+                        <strong>الإجمالي الكلي</strong>
+                    </td>
+                    <td>
+                        ${(order.grandTotal || 0).toFixed(1)} ج
+                    </td>
+                </tr>
+            </tfoot>
         </table>
+
         <div class="invoice-footer">
-          شكراً لتعاملكم معنا 🤝<br>طيور الحلال - الجودة والثقة
+            شكراً لتعاملكم معنا ❤️
         </div>
-      </div>
+
+    </div>
     `;
 
     document.getElementById('modalContent').innerHTML = `
-      <h3 style="margin-bottom:12px;">🧾 فاتورة مطعم</h3>
-      ${invoiceHTML}
-      <div class="modal-buttons">
-        <button class="btn btn-blue" onclick="window.captureInvoice()">📸 تحميل كصورة</button>
-        <button class="btn btn-green" onclick="window.sendRestaurantWhatsApp('${encodeURIComponent(whatsappMsg)}', '${order.customerPhone}', '${order.agentPhone}', '${order.restaurantPhone}')">💬 إرسال واتساب</button>
-        <button class="btn btn-outline" onclick="window.closeAndResetOrder()">إغلاق</button>
-      </div>`;
-    document.getElementById('modalContainer').style.display = 'flex';
-  }
+        <h3 style="margin-bottom:15px;">فاتورة الطلب</h3>
 
-  window.captureInvoice = () => {
+        ${invoiceHTML}
+
+        <div class="modal-buttons">
+            <button class="btn btn-blue" onclick="captureInvoice()">
+                تحميل كصورة
+            </button>
+
+            <button class="btn btn-green"
+                onclick="sendRestaurantWhatsApp(
+                    '${safeMsg}',
+                    '${order.customerPhone || ''}',
+                    '${order.agentPhone || ''}',
+                    '${order.restaurantPhone || ''}'
+                )">
+                إرسال واتساب
+            </button>
+
+            <button class="btn btn-outline"
+                onclick="closeAndResetOrder()">
+                إغلاق
+            </button>
+        </div>
+    `;
+
+    document.getElementById('modalContainer').style.display = 'flex';
+}
+
+
+window.captureInvoice = () => {
     const invoiceEl = document.getElementById('restaurantInvoicePrint');
-    if (invoiceEl) {
-      captureElement(invoiceEl, `فاتورة_مطعم_${Date.now()}.png`);
+
+    if (!invoiceEl) {
+        showToast('الفاتورة غير موجودة');
+        return;
     }
-  };
+
+    if (typeof captureElement !== 'function') {
+        showToast('ميزة التصوير غير متاحة');
+        return;
+    }
+
+    captureElement(
+        invoiceEl,
+        `فاتورة_${Date.now()}.png`
+    );
+};
 
   window.sendRestaurantWhatsApp = (msg, phone, agentPhone, restPhone) => {
     window.open(`https://wa.me/${formatPhoneForWhatsapp(phone)}?text=${msg}`, '_blank');
