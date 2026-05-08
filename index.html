@@ -146,75 +146,88 @@
       to { opacity:1; transform: translateY(0); }
     }
     /* ========== التطبيق الرئيسي ========== */
-    #mainApp { display: none; }
-    .header {
-      background: var(--white);
-      border-bottom: 3px solid var(--red);
-      position: sticky;
-      top:0;
-      z-index: 1000;
-      box-shadow: var(--shadow-md);
-    }
-    .header-inner {
-      max-width: 1200px;
-      margin:0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      padding: 8px 16px;
-      flex-wrap:wrap;
-      gap:8px;
-    }
-    .logo-section {
-      display:flex;
-      align-items:center;
-      gap:10px;
-      min-width: fit-content;
-    }
-    .logo-icon {
-      width: 45px;
-      height: 45px;
-      background: var(--red);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
-      color: white;
-      flex-shrink: 0;
-    }
-    .logo-text {
-      font-size: 1.3rem;
-      font-weight: 900;
-      color: var(--red);
-      white-space: nowrap;
-    }
-    .logo-slogan {
-      font-size: 0.65rem;
-      color: var(--gray-500);
-      white-space: nowrap;
-    }
-    .login-logo {
-    width: 90px;
-    height: 90px;
-    margin: 0 auto 15px;
+#mainApp {
+  display: none;
 }
 
-.login-logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+.header {
+  background: var(--white);
+  border-bottom: 3px solid var(--red);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-md);
 }
 
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: fit-content;
+}
+
+/* لوجو الهيدر بدون خلفية */
 .logo-icon {
-    width: 55px;
-    height: 55px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
 }
 
 .logo-icon img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
+}
+
+/* النص */
+.logo-text {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--red);
+  white-space: nowrap;
+}
+
+.logo-slogan {
+  font-size: 0.65rem;
+  color: var(--gray-500);
+  white-space: nowrap;
+}
+
+/* لوجو شاشة تسجيل الدخول */
+.login-logo {
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 15px;
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0;
+}
+
+.login-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: transparent;
 }
     .nav-scroll {
       display: flex;
@@ -722,8 +735,7 @@
         </div>
 
         <div>
-          <div class="logo-text">طيور الحلال</div>
-          <div class="logo-slogan">الجودة والثقة</div>
+         
         </div>
       </div>
 
@@ -1720,7 +1732,7 @@
     if (!agent) { showToast('⚠️ اختر مندوباً', 'error'); return; }
     const subtotal = currentCart.reduce((s, c) => s + c.total, 0);
     const grandTotal = subtotal + delivery;
-    const invoiceId = 'INV-' + Date.now().toString().slice(-8);
+    const invoiceId = 'INV-' + Math.floor(Math.random() * 100000);
     let restaurantId = null, restaurantName = '', restaurantPhone = '';
     if (type === 'restaurant') {
       restaurantId = document.getElementById('orderRestaurantSelect')?.value;
@@ -1871,11 +1883,11 @@
   function renderRecords(container) {
     container.innerHTML = `<div class="card">
       <div class="tabs" id="recordsTabs">
-        <button class="tab-btn active" data-tab="invoices">🧾 فواتير</button>
-        <button class="tab-btn" data-tab="expenses">💸 مصروفات</button>
-        <button class="tab-btn" data-tab="clients">👥 عملاء</button>
-        <button class="tab-btn" data-tab="profits">📊 أرباح</button>
-        <button class="tab-btn" data-tab="consumables">📦 مستهلكات</button>
+        <button class="tab-btn active" data-tab="invoices"> فواتير</button>
+        <button class="tab-btn" data-tab="expenses"> مصروفات</button>
+        <button class="tab-btn" data-tab="clients"> عملاء</button>
+        <button class="tab-btn" data-tab="profits"> أرباح</button>
+        <button class="tab-btn" data-tab="consumables"> مستهلكات</button>
       </div>
       <div id="recordsTabContent"></div>
     </div>`;
